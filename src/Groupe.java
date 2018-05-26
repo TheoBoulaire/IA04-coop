@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sim.engine.SimState;
+import sim.engine.Stoppable;
 import sim.util.Bag;
 
 public class Groupe extends Agent{
@@ -10,8 +11,8 @@ public class Groupe extends Agent{
 
 	private List<Insecte> insectes;
 
-	public Groupe(double aggro, int x, int y) {
-		super(aggro, x, y);
+	public Groupe(int x, int y, int identite, double aggro, double strength) {
+		super(x, y, identite, aggro, strength);
 		insectes = new ArrayList<>();
 	}
 
@@ -21,7 +22,7 @@ public class Groupe extends Agent{
 		Modele m = (Modele) ss;
 		deplacer(m);
 		Groupe ennemy = samePlace(m);
-		fight(ennemy);
+		fight(ennemy, m);
 		if(dead) {
 			m.grille.remove(this);
 			m.aggroMorts.push(aggro);
@@ -37,8 +38,11 @@ public class Groupe extends Agent{
 			for(Object o : b) {
 				if(o instanceof Groupe) {
 					Groupe g = (Groupe) o;
-					if(g.aggro != aggro && g.x == x && g.y == y)
+					if(g != this) {
 						return g;
+					}
+//					if(g.aggro != aggro && g.x == x && g.y == y)
+//						return g;
 				}
 			}
 		}
@@ -46,9 +50,21 @@ public class Groupe extends Agent{
 	}
 	
 	
-	private void fight(Groupe groupe) {
-		if(groupe != null && Math.random() < aggro)
-			attack(groupe);
+	private void fight(Groupe groupe, Modele modele) {
+//		if(groupe != null && Math.random() < aggro)
+//			attack(groupe);
+		
+		if(groupe != null) {
+			if(this.identite > groupe.identite) {
+				System.out.println("enemy groupe plus faible");
+				attack(groupe);
+			}else if(this.identite == groupe.identite){
+				join(groupe, modele);
+			}else {
+				System.out.println("enemy groupe plus fort");
+				attack(groupe);
+			}
+		}
 	}
 	
 	private void attack(Groupe groupe) {
@@ -58,6 +74,13 @@ public class Groupe extends Agent{
 		groupe.dead |= res;
 	}
 	
+	private void join(Groupe grp, Modele modele) {
+		System.out.println("Deux groupes joignent ensemble.");
+		insectes.addAll(grp.getInsectes());
+		strength += grp.strength;
+		modele.grille.remove(grp);
+		grp.stoppable.stop();
+	}
 	
 	public void rejoindreGroupe(Insecte insecte) {
 		if(!insectes.contains(insecte)) {

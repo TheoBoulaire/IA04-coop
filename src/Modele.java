@@ -25,23 +25,32 @@ public class Modele extends SimState {
 		grille.clear();
 		//pos agents
 		int x, y;
+		int identite;
+		double aggro;
+		double strength;
 		for(int i = 0; i < c.nInsectes; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
-			Insecte ins = new Insecte(Math.random(), x, y);
+			identite = (int)Math.ceil(Math.random()*10);
+			aggro = (double)identite/10;
+			strength = identite*10;
+			System.out.println("identite = " + identite);
+			System.out.println("aggro = " + aggro);
+			System.out.println("strength = " + strength + "\n");
+			Insecte ins = new Insecte( x, y, identite, aggro, strength);
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
 		}
 		
-		for(int i = 0; i < 4; i++) {
-			x = (int) Math.floor(Math.random()*c.grilleL);
-			y = (int) Math.floor(Math.random()*c.grilleH);
-			Groupe groupe = new Groupe(Math.random(), x, y);
-			Stoppable stoppable = schedule.scheduleRepeating(groupe); 
-			groupe.stoppable = stoppable;
-			grille.setObjectLocation(groupe, x, y);
-		}
+//		for(int i = 0; i < 4; i++) {
+//			x = (int) Math.floor(Math.random()*c.grilleL);
+//			y = (int) Math.floor(Math.random()*c.grilleH);
+//			Groupe groupe = new Groupe(x, y, Math.random(), (int)(Math.random()*20) ,(int)(Math.random()*10));
+//			Stoppable stoppable = schedule.scheduleRepeating(groupe); 
+//			groupe.stoppable = stoppable;
+//			grille.setObjectLocation(groupe, x, y);
+//		}
 		
 		
 	}

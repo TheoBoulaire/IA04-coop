@@ -9,16 +9,18 @@ public abstract class Agent implements Steppable{
 		public static Constants c;
 		public double strength = 0;
 		public double aggro = 0;
+		public int identite = 0;
 		public int x, y;
 		public boolean dead = false;
 		public Stoppable stoppable;
 		
 		
-		public Agent(double a, int x, int y) {
+		public Agent(int x, int y, int identite, double aggro, double strength) {
 			this.x = x;
 			this.y = y;
-			//this.strength = s;
-			this.aggro = a;
+			this.identite = identite;
+			this.aggro = aggro;
+			this.strength = strength;
 		}
 
 		@Override
@@ -68,6 +70,10 @@ public abstract class Agent implements Steppable{
 			y = newY;
 		}
 		
+		protected void meurt(Modele modele) {
+			modele.grille.remove(this);
+			stoppable.stop();
+		}
 		
 //		public double getAggro() {
 //			return aggro;
@@ -76,4 +82,6 @@ public abstract class Agent implements Steppable{
 //		public double getStrength() {
 //			return strength;
 //		}
+		
+		
 }
