@@ -13,18 +13,15 @@ public class Insecte extends Agent{
 		super(x, y, identite, aggro, strength);
 	}
 	
-	private Insecte samePlace(Modele m) {
+	private Agent samePlace(Modele m) {
 		Bag b = m.grille.getObjectsAtLocation(x, y);
-//		System.out.println("Insecte b = " + b);
 		if(b != null && !b.isEmpty()) {
 			for(Object o : b) {
-				if(o instanceof Insecte) {
-					Insecte i = (Insecte) o;
-					if(i != this) {
-						return i;
+				if(o instanceof Agent) {
+					Agent a = (Agent) o;
+					if(a != this) {
+						return a;
 					}
-//					if(i.aggro != aggro && i.x == x && i.y == y)
-//						return i;
 				}
 			}
 		}
@@ -32,42 +29,48 @@ public class Insecte extends Agent{
 	}
 	
 	
-	private void fight(Insecte ins, Modele modele) {
-//		if(ins != null && Math.random() < aggro)
-//			attack(ins);
-		if(ins != null) {
-			if(this.identite > ins.identite) {
-				System.out.println("enemy insecte plus faible");
-				attack(ins);
-			}else if(this.identite == ins.identite){
-				join(ins, modele);
+	private void fight(Agent agent, Modele modele) {
+		if(agent != null) {
+			if(this.identite > agent.identite) {
+				System.out.println("Un insecte rencontre un ennemi plus faible");
+				attack(agent);
+			}else if(this.identite == agent.identite){
+				join(agent, modele);
 			}else {
-				System.out.println("enemy insecte plus fort");
-				attack(ins);
+				System.out.println("Un insecte rencontre un ennemi plus fort");
+				attack(agent);
 			}
 		}
 	}
 	
-	private void attack(Insecte ins) {
-		System.out.println("J'attaque.");
+	private void attack(Agent agent) {
+		System.out.println("Insecte attaque.\n");
 		boolean res = Math.random() > 0.5;
 		this.dead |= !res;
-		ins.dead |= res;
+		agent.dead |= res;
 	}
 	
-	private void join(Insecte ins, Modele modele) {
-		System.out.println("Deux insectes joignent ensemble.");
+	private void join(Agent agent, Modele modele) {
 		if(myGroupe == null) {
-			Groupe groupe = new Groupe(x, y, identite, aggro, strength+ins.strength);
-			myGroupe = groupe;
-			if(ins.getMyGroupe() == null) {
-				ins.setMyGroupe(groupe);
+			if(agent instanceof Insecte) {//Deux insectes joignent ensemble.
+				System.out.println("Deux insectes joignent ensemble.\n");
+				Insecte ins = (Insecte)agent;
+				Groupe groupe = new Groupe(x, y, identite, aggro, strength+ins.strength);
+				myGroupe = groupe;
+				if(ins.getMyGroupe() == null) {
+					ins.setMyGroupe(groupe);
+				}
+				groupe.addInsecte(this);
+				groupe.addInsecte(ins);
+				Stoppable stoppable = modele.schedule.scheduleRepeating(groupe); 
+				groupe.stoppable = stoppable;
+				modele.grille.setObjectLocation(groupe, x, y);
+			}else {//L'insecte se joignt a un groupe
+				System.out.println("L'insecte se joignt a un groupe.\n");
+				Groupe groupe = (Groupe)agent;
+				groupe.addInsecte(this);
+				myGroupe = groupe;
 			}
-			groupe.rejoindreGroupe(this);
-			groupe.rejoindreGroupe(ins);
-			Stoppable stoppable = modele.schedule.scheduleRepeating(groupe); 
-			groupe.stoppable = stoppable;
-			modele.grille.setObjectLocation(groupe, x, y);
 		}
 		meurt(modele);
 	}
@@ -76,7 +79,7 @@ public class Insecte extends Agent{
 	public void step(SimState ss) {
 		Modele m = (Modele) ss;
 		deplacer(m);
-		Insecte ennemy = samePlace(m);
+		Agent ennemy = samePlace(m);
 		fight(ennemy, m);
 		if(dead) {
 			m.grille.remove(this);

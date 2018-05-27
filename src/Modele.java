@@ -58,5 +58,6 @@ public class Modele extends SimState {
 	@Override
 	public void finish() {
 		System.out.println(this.aggroMorts);
+		this.aggroMorts.clear();
 	}
 }

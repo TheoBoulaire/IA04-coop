@@ -21,7 +21,7 @@ public class Groupe extends Agent{
 	public void step(SimState ss) {
 		Modele m = (Modele) ss;
 		deplacer(m);
-		Groupe ennemy = samePlace(m);
+		Agent ennemy = samePlace(m);
 		fight(ennemy, m);
 		if(dead) {
 			m.grille.remove(this);
@@ -41,8 +41,6 @@ public class Groupe extends Agent{
 					if(g != this) {
 						return g;
 					}
-//					if(g.aggro != aggro && g.x == x && g.y == y)
-//						return g;
 				}
 			}
 		}
@@ -50,39 +48,46 @@ public class Groupe extends Agent{
 	}
 	
 	
-	private void fight(Groupe groupe, Modele modele) {
-//		if(groupe != null && Math.random() < aggro)
-//			attack(groupe);
-		
-		if(groupe != null) {
-			if(this.identite > groupe.identite) {
-				System.out.println("enemy groupe plus faible");
-				attack(groupe);
-			}else if(this.identite == groupe.identite){
-				join(groupe, modele);
+	private void fight(Agent agent, Modele modele) {
+		if(agent != null) {
+			if(this.identite > agent.identite) {
+				System.out.println("Un groupe rencontre un ennemi plus faible");
+				attack(agent);
+			}else if(this.identite == agent.identite){
+				join(agent, modele);
 			}else {
-				System.out.println("enemy groupe plus fort");
-				attack(groupe);
+				System.out.println("Un groupe rencontre un ennemi plus fort");
+				attack(agent);
 			}
 		}
 	}
 	
-	private void attack(Groupe groupe) {
-		System.out.println("Groupe attaque.");
+	private void attack(Agent agent) {
+		System.out.println("Groupe attaque.\n");
 		boolean res = Math.random() > 0.5;
 		this.dead |= !res;
-		groupe.dead |= res;
+		agent.dead |= res;
 	}
 	
-	private void join(Groupe grp, Modele modele) {
-		System.out.println("Deux groupes joignent ensemble.");
-		insectes.addAll(grp.getInsectes());
-		strength += grp.strength;
-		modele.grille.remove(grp);
-		grp.stoppable.stop();
+	private void join(Agent agent, Modele modele) {
+		if(agent instanceof Groupe) {//Deux groupes joignent ensemble
+			System.out.println("Deux groupes joignent ensemble.\n");
+			Groupe grp = (Groupe)agent;
+			insectes.addAll(grp.getInsectes());
+			strength += grp.strength;
+			grp.getInsectes().clear();
+			modele.grille.remove(grp);
+			grp.stoppable.stop();
+		}else {//Un groupe permet a un insecte de joindre a lui meme
+			System.out.println("Un groupe permet a un insecte de joindre a lui meme.\n");
+			Insecte ins = (Insecte)agent;
+			insectes.add(ins);
+			modele.grille.remove(ins);
+			ins.stoppable.stop();
+		}
 	}
 	
-	public void rejoindreGroupe(Insecte insecte) {
+	public void addInsecte(Insecte insecte) {
 		if(!insectes.contains(insecte)) {
 			insectes.add(insecte);
 		}
