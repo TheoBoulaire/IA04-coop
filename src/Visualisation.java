@@ -23,7 +23,6 @@ public class Visualisation extends GUIState{
 
 	public Visualisation(SimState state) {
 		super(state);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void start() {
@@ -38,6 +37,7 @@ public class Visualisation extends GUIState{
 		Modele modele = (Modele) state;
 		grillePortrayal.setField(modele.grille);
 		grillePortrayal.setPortrayalForClass(Insecte.class, getInsectePortrayal());
+		grillePortrayal.setPortrayalForClass(Groupe.class, getGroupePortrayal());
 		display.reset();
 		display.setBackdrop(new Color(220,220,220));
 		display.repaint();
@@ -48,11 +48,26 @@ public class Visualisation extends GUIState{
 			{
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info)
 				{
-				Insecte ins = (Insecte)object;
-				int R = (int) Math.abs(ins.getAggro()*255);
-				int V = (int) Math.abs(ins.getStrength()*255);
-				paint = new Color(R, V, 0);
-				super.draw(object, graphics, info);
+					Insecte ins = (Insecte)object;
+					int R = (int) Math.abs(ins.aggro*255);
+					int V = (int) Math.abs(ins.aggro*255);
+					paint = new Color(R, V, 0);
+					super.draw(object, graphics, info);
+				}
+			};
+		return r;
+	}
+	
+	private RectanglePortrayal2D getGroupePortrayal() {
+		RectanglePortrayal2D r = new RectanglePortrayal2D()
+			{
+				public void draw(Object object, Graphics2D graphics, DrawInfo2D info)
+				{
+					Groupe groupe = (Groupe)object;
+					int R = (int) Math.abs(groupe.aggro*255);
+					int V = (int) Math.abs(groupe.aggro*255);
+					paint = new Color(0, 0, 255);
+					super.draw(object, graphics, info);
 				}
 			};
 		return r;

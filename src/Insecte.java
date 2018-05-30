@@ -1,106 +1,86 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import sim.engine.SimState;
-import sim.engine.Steppable;
 import sim.engine.Stoppable;
 import sim.util.Bag;
-import sim.util.IntBag;
 
-public class Insecte implements Steppable {
-	//private double strength = 0;
-	private double aggro = 0;
-	private int x, y;
-	static public Constants c;
-	private boolean dead = false;
-	public Stoppable stoppable;
+public class Insecte extends Agent{
 	
+	private static final long serialVersionUID = 31265800453373745L;
 	
-	public Insecte(double a, int x, int y) {
-		this.x = x;
-		this.y = y;
-		//this.strength = s;
-		this.aggro = a;
-	}
-
+	private Groupe myGroupe = null;
 	
-	public double getAggro() {
-		return aggro;
-	}
-	public double getStrength() {
-		return 0;
+	public Insecte(int x, int y, int identite, double aggro, double strength) {
+		super(x, y, identite, aggro, strength);
 	}
 	
-	private void deplacer(Modele m){
-		int direction = (int) Math.floor(Math.random()*9);
-		pas(m,direction);
-		//System.out.println("Je me déplace aléatoirement.");
-	}
-	
-	private Insecte samePlace(Modele m) {
+	private Agent samePlace(Modele m) {
 		Bag b = m.grille.getObjectsAtLocation(x, y);
-		for(Object o : b) {
-			Insecte i = (Insecte) o;
-			if(i.aggro != aggro && i.x == x && i.y == y)
-				return i;
+		if(b != null && !b.isEmpty()) {
+			for(Object o : b) {
+				if(o instanceof Agent) {
+					Agent a = (Agent) o;
+					if(a != this) {
+						return a;
+					}
+				}
+			}
 		}
 		return null;
 	}
 	
-	private void pas(Modele m, int direction) {
-		int newX = 0, newY = 0;
-		switch(direction) {
-		case 0:
-			newX = x -1; newY = y -1;
-			break;
-		case 1:
-			newX = x; newY = y -1;
-			break;
-		case 2:
-			newX = x +1; newY = y -1;
-			break;
-		case 3:
-			newX = x -1; newY = y;
-			break;
-		case 4:
-			newX = x; newY = y;
-			break;
-		case 5:
-			newX = x+1; newY = y;
-			break;
-		case 6:
-			newX = x-1; newY = y + 1;
-			break;
-		case 7:
-			newX = x; newY = y + 1;
-			break;
-		case 8:
-			newX = x+1; newY = y + 1;
-			break;
+	
+	private void fight(Agent agent, Modele modele) {
+		if(agent != null) {
+			if(this.identite > agent.identite) {
+				System.out.println("Un insecte rencontre un ennemi plus faible");
+				attack(agent);
+			}else if(this.identite == agent.identite){
+				join(agent, modele);
+			}else {
+				System.out.println("Un insecte rencontre un ennemi plus fort");
+				attack(agent);
+			}
 		}
-		newX = (newX+c.grilleL) % c.grilleL;
-		newY = (newY+c.grilleH) % c.grilleH;
-		m.grille.setObjectLocation(this, newX, newY);
-		x = newX;
-		y = newY;
 	}
 	
-	private void fight(Insecte ins) {
-		if(ins != null && Math.random() < aggro)
-			attack(ins);
-	}
-	private void attack(Insecte ins) {
-		System.out.println("J'attaque.");
+	private void attack(Agent agent) {
+		System.out.println("Insecte attaque.\n");
 		boolean res = Math.random() > 0.5;
 		this.dead |= !res;
-		ins.dead |= res;
+		agent.dead |= res;
 	}
+	
+	private void join(Agent agent, Modele modele) {
+		if(myGroupe == null) {
+			if(agent instanceof Insecte) {//Deux insectes joignent ensemble.
+				System.out.println("Deux insectes joignent ensemble.\n");
+				Insecte ins = (Insecte)agent;
+				Groupe groupe = new Groupe(x, y, identite, aggro, strength+ins.strength);
+				myGroupe = groupe;
+				if(ins.getMyGroupe() == null) {
+					ins.setMyGroupe(groupe);
+				}
+				groupe.addInsecte(this);
+				groupe.addInsecte(ins);
+				Stoppable stoppable = modele.schedule.scheduleRepeating(groupe); 
+				groupe.stoppable = stoppable;
+				modele.grille.setObjectLocation(groupe, x, y);
+			}else {//L'insecte se joignt a un groupe
+				System.out.println("L'insecte se joignt a un groupe.\n");
+				Groupe groupe = (Groupe)agent;
+				groupe.addInsecte(this);
+				myGroupe = groupe;
+			}
+		}
+		meurt(modele);
+	}
+	
 	@Override
 	public void step(SimState ss) {
 		Modele m = (Modele) ss;
 		deplacer(m);
-		Insecte ennemy = samePlace(m);
-		fight(ennemy);
+		Agent ennemy = samePlace(m);
+		fight(ennemy, m);
 		if(dead) {
 			m.grille.remove(this);
 			m.aggroMorts.push(this.aggro);
@@ -108,4 +88,13 @@ public class Insecte implements Steppable {
 			//System.out.println("Je meurs.");
 		}
 	}
+
+	public Groupe getMyGroupe() {
+		return myGroupe;
+	}
+
+	public void setMyGroupe(Groupe myGroupe) {
+		this.myGroupe = myGroupe;
+	}
+	
 }
