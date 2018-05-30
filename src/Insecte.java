@@ -3,7 +3,9 @@ import sim.engine.SimState;
 import sim.engine.Stoppable;
 import sim.util.Bag;
 
+
 public class Insecte extends Agent{
+  private int nStep = 0;
 	
 	private static final long serialVersionUID = 31265800453373745L;
 	
@@ -82,11 +84,19 @@ public class Insecte extends Agent{
 		Agent ennemy = samePlace(m);
 		fight(ennemy, m);
 		if(dead) {
-			m.grille.remove(this);
-			m.aggroMorts.push(this.aggro);
-			stoppable.stop();
-			//System.out.println("Je meurs.");
+			die(m);
 		}
+		nStep++;
+		if(nStep > 20000) {
+			m.end();
+		}
+	}
+	
+	
+	
+	public void die(Modele m) {
+		stoppable.stop();
+		m.hearIsDead(this);
 	}
 
 	public Groupe getMyGroupe() {
