@@ -10,7 +10,7 @@ import sim.util.IntBag;
 public class Insecte implements Steppable {
 	//private double strength = 0;
 	private double aggro = 0;
-	private int x, y;
+	private int x, y, nStep = 0;
 	static public Constants c;
 	private boolean dead = false;
 	public Stoppable stoppable;
@@ -102,10 +102,18 @@ public class Insecte implements Steppable {
 		Insecte ennemy = samePlace(m);
 		fight(ennemy);
 		if(dead) {
-			m.grille.remove(this);
-			m.aggroMorts.push(this.aggro);
-			stoppable.stop();
-			//System.out.println("Je meurs.");
+			die(m);
 		}
+		nStep++;
+		if(nStep > 20000) {
+			m.end();
+		}
+	}
+	
+	
+	
+	public void die(Modele m) {
+		stoppable.stop();
+		m.hearIsDead(this);
 	}
 }
