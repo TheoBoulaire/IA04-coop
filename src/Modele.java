@@ -5,20 +5,20 @@ import java.util.Random;
 import sim.engine.SimState;
 import sim.engine.Stoppable;
 import sim.field.grid.SparseGrid2D;
-import sim.portrayal.Inspector;
 
 public class Modele extends SimState {
 	
+
 	private IdentiteModele im = null;
 	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
-	
-	static Constants c = new Constants(20, 20, 50, 400);
+	private static final long serialVersionUID = 2598273691291778150L;
+	static Constants c = new Constants(20, 20, 10, 400);
 	public SparseGrid2D grille = new SparseGrid2D(c.grilleL, c.grilleH);
 
 	public Modele(long seed) {
 		super(seed);
-		Insecte.c = c;
+		Agent.c = c;
 		Visualisation.constants = c;
 	}
 	
@@ -35,10 +35,13 @@ public class Modele extends SimState {
 		grille.clear();
 		//pos agents
 		int x, y;
+
 		Random r = new Random();
 		for(int i = 0; i < c.nInsectes; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
+			int identite = (int)Math.ceil(Math.random()*10);
+			double strength = identite*10;
 			double modifAggro = r.nextGaussian();
 			modifAggro *= 0.05;
 			double aggro = 0.5;
@@ -48,12 +51,26 @@ public class Modele extends SimState {
 			aggro += modifAggro;
 			if(aggro > 1) aggro = 1;
 			else if(aggro < 0.05) aggro = 0.05;
-			Insecte ins = new Insecte(aggro, x, y);
+			Insecte ins = new Insecte(x, y,identite,aggro,strength);
+			System.out.println("identite = " + identite);
+			System.out.println("aggro = " + aggro);
+			System.out.println("strength = " + strength + "\n");
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
 			this.insectesVivants.add(ins);
 		}
+		
+//		for(int i = 0; i < 4; i++) {
+//			x = (int) Math.floor(Math.random()*c.grilleL);
+//			y = (int) Math.floor(Math.random()*c.grilleH);
+//			Groupe groupe = new Groupe(x, y, Math.random(), (int)(Math.random()*20) ,(int)(Math.random()*10));
+//			Stoppable stoppable = schedule.scheduleRepeating(groupe); 
+//			groupe.stoppable = stoppable;
+//			grille.setObjectLocation(groupe, x, y);
+//		}
+		
+		
 	}
 	
 	@Override
@@ -111,5 +128,5 @@ public class Modele extends SimState {
 
 	public void setGrille(SparseGrid2D grille) {
 		this.grille = grille;
-	}
+  }
 }

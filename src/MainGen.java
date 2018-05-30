@@ -8,7 +8,7 @@ public class MainGen {
 		runUI();
 	}
 	public static void runUI() {
-		Modele model = new Modele(System.currentTimeMillis(), 0);
+		Modele model = new Modele(System.currentTimeMillis());
 		model.start();
 		while(model.schedule.step(model));
 		model.finish();
