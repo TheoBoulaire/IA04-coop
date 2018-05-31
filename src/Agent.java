@@ -10,17 +10,19 @@ public abstract class Agent implements Steppable{
 		public double strength = 0;
 		public double aggro = 0;
 		public int identite = 0;
+		public int energie = 0;
 		public int x, y;
 		public boolean dead = false;
 		public Stoppable stoppable;
 		
 		
-		public Agent(int x, int y, int identite, double aggro, double strength) {
+		public Agent(int x, int y, int identite, double aggro, double strength, int energie) {
 			this.x = x;
 			this.y = y;
 			this.identite = identite;
 			this.aggro = aggro;
 			this.strength = strength;
+			this.energie = energie;
 		}
 
 		@Override
@@ -30,6 +32,7 @@ public abstract class Agent implements Steppable{
 		public void deplacer(Modele m) {
 			int direction = (int) Math.floor(Math.random()*9);
 			pas(m,direction);
+			consommerEnergie();
 		}
 			
 		private void pas(Modele m, int direction) {
@@ -75,13 +78,15 @@ public abstract class Agent implements Steppable{
 			stoppable.stop();
 		}
 		
-//		public double getAggro() {
-//			return aggro;
-//		}
-//		
-//		public double getStrength() {
-//			return strength;
-//		}
+		public double getAggro() {
+			return aggro;
+		}
+		
+		public double getStrength() {
+			return strength;
+		}
+		
+		public abstract void consommerEnergie();
 		
 		
 }
