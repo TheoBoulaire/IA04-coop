@@ -26,7 +26,11 @@ public class Groupe extends Agent{
 		boolean roundDone = false;
 		
 		if(!dead && energie > 0 && insectes.size() > 0) {
-			System.out.println("Le nombre de membre dans le groupe = " + insectes.size() + ". L'energie de groupe = " + energie);
+			System.out.println("Le nombre de membre dans le groupe = " + insectes.size() + ". L'energie de groupe = " + energie);		
+			for(Insecte ins : insectes) {
+				System.out.println("ins.energie = " + ins.energie);
+			}
+			//TODO consederer le cas quand le groupe reste une seule insecte
 			if(mangersource(m)) {
 				roundDone = true;
 			}
@@ -35,10 +39,9 @@ public class Groupe extends Agent{
 				if(ennemy != null) {
 					fight(ennemy, m);
 					if(dead || energie == 0) {
-						m.grille.remove(this);
-						m.aggroMorts.push(aggro);
-						stoppable.stop();
 						System.out.println("Groupe meurt.");
+						m.aggroMorts.push(aggro);
+						meurt(m, this);
 					}
 				}else {
 					System.out.println("Groupe deplace.");
@@ -47,15 +50,13 @@ public class Groupe extends Agent{
 				roundDone = true;
 			}
 		}else {
-			m.grille.remove(this);
 			m.aggroMorts.push(aggro);
-			stoppable.stop();
+			meurt(m, this);
 		}
 	}
 
 	private Groupe samePlace(Modele m) {
 		Bag b = m.grille.getObjectsAtLocation(x, y);
-//		System.out.println("Groupe b = " + b);
 		if(b != null && !b.isEmpty()) {
 			for(Object o : b) {
 				if(o instanceof Groupe) {
@@ -101,15 +102,13 @@ public class Groupe extends Agent{
 			strength += grp.strength;
 			energie += grp.energie;
 			grp.getInsectes().clear();
-			modele.grille.remove(grp);
-			grp.stoppable.stop();
+			meurt(modele, this);
 		}else {//Un groupe permet a un insecte de joindre a lui meme
 			System.out.println("Un groupe permet a un insecte de joindre a lui meme.\n");
 			Insecte ins = (Insecte)agent;
-			insectes.add(ins);
-			energie += ins.energie;
-			modele.grille.remove(ins);
-			ins.stoppable.stop();
+			ins.setMyGroupe(this);
+			addInsecte(ins);
+			meurt(modele, ins);
 		}
 	}
 	
@@ -162,7 +161,6 @@ public class Groupe extends Agent{
             }  
 		});
 	
-		System.out.println("insectes sort = " + insectes.get(0).energie + " et " + insectes.get(1).energie);
 		if(insectes.get(0).energie < c.maxEnergy) {
 			System.out.println("Un groupe mange la nourriture.");
 			
@@ -184,6 +182,15 @@ public class Groupe extends Agent{
 					insectes.get(i).energie = c.maxEnergy;
 					i++;
 				}
+				
+				if(i == insectes.size()-1 && rest > 0) {//Le cas : 13, 13
+					energie = energie + rest;
+					insectes.get(i).energie += rest;
+				}
+				
+				for(Insecte ins : insectes) {
+					System.out.println("apres manger ins.energie = " + ins.energie);
+				}
 			}
 			
 			b = true;
@@ -198,33 +205,23 @@ public class Groupe extends Agent{
 		List<Insecte> toDelete = new ArrayList<>();
 		for(Insecte ins : insectes) {
 			if(ins.energie > 1){
-				System.out.println("ins.energie > 1. \n");
+				System.out.println("ins.energie > 1.");
 				ins.energie--;
 				energie--;
+				System.out.println("apres deplace ins.energie = " + ins.energie);
 			}else if(ins.energie == 1) {
-				System.out.println("ins.energie == 1. \n");
+				System.out.println("ins.energie == 1.");
 				toDelete.add(ins);
 				ins.energie--;
 				energie--;
+				System.out.println("apres deplace ins.energie = " + ins.energie);
 			}else if(ins.energie == 0) {
 				System.out.println("ins.energie == 0. \n");
 				toDelete.add(ins);
 			}
 		}
 		insectes.removeAll(toDelete);
-		
-		
-		
-//		for(Insecte ins : insectes) {
-//			if(ins.energie == 1) {
-//				insectes.remove(ins);
-//				energie--;
-//			}else if(ins.energie == 0) {
-//				insectes.remove(ins);
-//			}else {
-//				ins.energie--;
-//			}
-//		}
+	
 	}
 	
 	

@@ -73,9 +73,10 @@ public abstract class Agent implements Steppable{
 			y = newY;
 		}
 		
-		protected void meurt(Modele modele) {
-			modele.grille.remove(this);
-			stoppable.stop();
+		protected void meurt(Modele modele, Agent agent) {
+			//System.out.println("agent stop!!!");
+			modele.grille.remove(agent);
+			agent.stoppable.stop();
 		}
 		
 		public double getAggro() {

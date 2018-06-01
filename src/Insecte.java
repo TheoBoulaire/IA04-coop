@@ -28,10 +28,9 @@ public class Insecte extends Agent{
 				if(ennemy != null) {
 					fight(ennemy, m);
 					if(dead || energie == 0) {
-						m.grille.remove(this);
-						m.aggroMorts.push(aggro);
-						stoppable.stop();
 						System.out.println("Insecte meurt. \n");
+						m.aggroMorts.push(aggro);
+						meurt(m, this);
 					}
 				}else {
 					System.out.println("Insecte deplace. \n");
@@ -40,9 +39,8 @@ public class Insecte extends Agent{
 				roundDone = true;
 			}
 		}else {
-			m.grille.remove(this);
-			m.aggroMorts.push(this.aggro);
-			stoppable.stop();
+			m.aggroMorts.push(aggro);
+			meurt(m, this);
 		}
 	}
 	
@@ -91,7 +89,7 @@ public class Insecte extends Agent{
 				System.out.println("Deux insectes joignent ensemble. \n");
 				Insecte ins = (Insecte)agent;
 				System.out.println("this.energie = " + energie + " ins.enegie = " + ins.energie);
-				//dans le constructeur, energie doit etre 0, puisque addInsecte() va ajouter leurs enegies
+				//dans le constructeur de Groupe, energie doit etre 0, puisque addInsecte() va ajouter leurs enegies
 				Groupe groupe = new Groupe(x, y, identite, aggro, strength+ins.strength, 0);
 				myGroupe = groupe;
 				if(ins.getMyGroupe() == null) {
@@ -99,6 +97,10 @@ public class Insecte extends Agent{
 				}
 				groupe.addInsecte(this); 
 				groupe.addInsecte(ins);
+				
+				meurt(modele, this);
+				meurt(modele, ins);
+				
 				Stoppable stoppable = modele.schedule.scheduleRepeating(groupe); 
 				groupe.stoppable = stoppable;
 				modele.grille.setObjectLocation(groupe, x, y);
@@ -107,9 +109,9 @@ public class Insecte extends Agent{
 				Groupe groupe = (Groupe)agent;
 				groupe.addInsecte(this);
 				myGroupe = groupe;
+				meurt(modele, this);
 			}
 		}
-		meurt(modele);
 	}
 
 
