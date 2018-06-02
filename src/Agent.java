@@ -11,18 +11,20 @@ public abstract class Agent implements Steppable{
 		public double aggro = 0;
 		public int identite = 0;
 		public int energie = 0;
+		public int vie = 0;
 		public int x, y;
 		public boolean dead = false;
 		public Stoppable stoppable;
 		
 		
-		public Agent(int x, int y, int identite, double aggro, double strength, int energie) {
+		public Agent(int x, int y, int identite, double aggro, double strength, int energie, int vie) {
 			this.x = x;
 			this.y = y;
 			this.identite = identite;
 			this.aggro = aggro;
 			this.strength = strength;
 			this.energie = energie;
+			this.vie = vie;
 		}
 
 		@Override
@@ -79,6 +81,21 @@ public abstract class Agent implements Steppable{
 			agent.stoppable.stop();
 		}
 		
+//		public void attack(Agent agent) {
+//			System.out.println("Agent attaque.");
+////			boolean res = Math.random() > 0.5;
+////			this.dead |= !res;
+////			agent.dead |= res;
+//			
+//			agent.vie -= strength;
+//			System.out.println("agent.vie = " + agent.vie);
+//			if (vie < 0) {
+//				vie = 0;
+//			}
+//			
+//			consommerEnergie();//consommer une unite d'energie
+//		}
+		
 		public double getAggro() {
 			return aggro;
 		}
@@ -89,5 +106,8 @@ public abstract class Agent implements Steppable{
 		
 		public abstract void consommerEnergie();
 		
-		
+		public void attackGroupe(Groupe groupe) {
+			Insecte firstIns = groupe.getInsectes().get(0);
+			firstIns.vie -= strength;
+		}
 }

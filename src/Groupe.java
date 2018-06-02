@@ -14,8 +14,8 @@ public class Groupe extends Agent{
 
 	private List<Insecte> insectes;
 
-	public Groupe(int x, int y, int identite, double aggro, double strength, int energie) {
-		super(x, y, identite, aggro, strength, energie);
+	public Groupe(int x, int y, int identite, double aggro, double strength, int energie, int vie) {
+		super(x, y, identite, aggro, strength, energie, vie);
 		insectes = new ArrayList<>();
 	}
 
@@ -24,34 +24,61 @@ public class Groupe extends Agent{
 	public void step(SimState ss) {
 		Modele m = (Modele) ss;
 		boolean roundDone = false;
+		List<Insecte> deadInsectes = new ArrayList<>();
 		
-		if(!dead && energie > 0 && insectes.size() > 0) {
-			System.out.println("Le nombre de membre dans le groupe = " + insectes.size() + ". L'energie de groupe = " + energie);		
-			for(Insecte ins : insectes) {
-				System.out.println("ins.energie = " + ins.energie);
-			}
-			//TODO consederer le cas quand le groupe reste une seule insecte
-			if(mangersource(m)) {
-				roundDone = true;
-			}
-			if(!roundDone) {
-				Agent ennemy = samePlace(m);
-				if(ennemy != null) {
-					fight(ennemy, m);
-					if(dead || energie == 0) {
-						System.out.println("Groupe meurt.");
-						m.aggroMorts.push(aggro);
-						meurt(m, this);
-					}
-				}else {
-					System.out.println("Groupe deplace.");
-					deplacer(m);
-				}
-				roundDone = true;
-			}
-		}else {
+		if(vie <= 0 || energie <= 0) {
+			System.out.println("Groupe meurt.");
 			m.aggroMorts.push(aggro);
 			meurt(m, this);
+		}else {//au moins un insecte est vivant    (vie > 0 && energie > 0)
+			
+			//supprimer les insectes dont leur vie est negative
+			for(Insecte ins : insectes) {
+				System.out.println("ins.vie = " + ins.vie + " et ins.energie = " + ins.energie);
+				if(ins.vie <= 0) {
+					deadInsectes.add(ins);
+					strength -= ins.strength;
+					//la vie du groupe est deja reduit dans la methode attackGroupe()
+					//l'energie du groupe est aussi verifie dans la methode consommerEnergie()
+				}
+			}
+			insectes.removeAll(deadInsectes);
+			
+			System.out.println("Le nombre de membre dans le groupe = " + insectes.size() + ". L'energie de groupe = " + energie);
+			
+			//traiter le cas lorsque le nombre de membre du groupe est egale 1, ce groupe doit devenir un insecte
+			if(insectes.size() == 1) {
+				System.out.println("le nombre de membre du groupe est egale 1.  Groupe disparait!!!");
+				Insecte ins = insectes.get(0);
+				ins.setMyGroupe(null);
+				Stoppable stoppable = m.schedule.scheduleRepeating(ins); 
+				ins.stoppable = stoppable;
+				m.grille.setObjectLocation(ins, x, y);
+				m.aggroMorts.push(aggro);
+				meurt(m, this);
+			}else {
+				if(vie > 0  && energie > 0 && insectes.size() > 1) {
+					if(mangersource(m)) {
+						roundDone = true;
+					}
+					if(!roundDone) {
+						Agent ennemy = samePlace(m);
+						if(ennemy != null && ennemy.vie > 0) {
+							fight(ennemy, m);
+							if(vie <= 0 || energie <= 0) {
+								System.out.println("Groupe meurt.");
+								m.aggroMorts.push(aggro);
+								meurt(m, this);
+							}
+						}else {
+							System.out.println("Groupe deplace.");
+							deplacer(m);
+						}
+						roundDone = true;
+					}
+				}
+			}
+				
 		}
 	}
 
@@ -73,25 +100,34 @@ public class Groupe extends Agent{
 	
 	private void fight(Agent agent, Modele modele) {
 		if(this.identite > agent.identite) {
-			System.out.println("Un groupe rencontre un ennemi plus faible");
+			System.out.println("Un groupe rencontre un ennemi '" + agent.getClass() + "' plus faible");
 			attack(agent);
 		}else if(this.identite == agent.identite){
 			join(agent, modele);
 		}else {
-			System.out.println("Un groupe rencontre un ennemi plus fort");
+			System.out.println("Un groupe rencontre un ennemi '" + agent.getClass() + "' plus fort");
 			attack(agent);
 		}
 	}
 	
 	private void attack(Agent agent) {
-		System.out.println("Groupe attaque.");
-		boolean res = Math.random() > 0.5;
-		this.dead |= !res;
-		agent.dead |= res;
-		System.out.println("Groupe consommerEnergie.\n");
-		this.consommerEnergie();
-		//agent.consommerEnergie();
+		System.out.println("Groupe attaque. strength = " + strength);
+//		boolean res = Math.random() > 0.5;
+//		this.dead |= !res;
+//		agent.dead |= res;
+//		this.consommerEnergie();
 		
+		if(agent instanceof Groupe) {
+			Groupe grp = (Groupe) agent;
+			attackGroupe(grp);
+		}
+		System.out.println("avant attaque agent.vie = " + agent.vie);
+		agent.vie -= strength;
+		System.out.println("apres attaque agent.vie = " + agent.vie);
+		if (vie < 0) {
+			vie = 0;
+		}
+		consommerEnergie();//consommer une unite d'energie
 	}
 	
 	private void join(Agent agent, Modele modele) {
@@ -116,6 +152,8 @@ public class Groupe extends Agent{
 		if(!insectes.contains(insecte)) {
 			insectes.add(insecte);
 			energie += insecte.energie;
+			strength += insecte.strength;
+			vie += insecte.vie;
 			System.out.println("addInsecte : l'enegie de groupe est " + energie + ".\n");
 		}
 	}
@@ -214,14 +252,15 @@ public class Groupe extends Agent{
 				toDelete.add(ins);
 				ins.energie--;
 				energie--;
+				strength -= ins.strength;
 				System.out.println("apres deplace ins.energie = " + ins.energie);
 			}else if(ins.energie == 0) {
 				System.out.println("ins.energie == 0. \n");
 				toDelete.add(ins);
+				strength -= ins.strength;
 			}
 		}
 		insectes.removeAll(toDelete);
-	
 	}
 	
 	

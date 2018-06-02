@@ -1,10 +1,6 @@
-import sim.engine.SimState;
-import sim.engine.Steppable;
-import sim.util.Int2D;
 
 public class Nourriture{
 	
-	private static final long serialVersionUID = 3170495511915516951L;
 	static Constants c;
 	int quantite;
 	private int x;

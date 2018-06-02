@@ -33,11 +33,11 @@ public class Modele extends SimState {
 			y = (int) Math.floor(Math.random()*c.grilleH);
 			identite = (int)Math.ceil(Math.random()*10);
 			aggro = (double)identite/10;
-			strength = identite*10;
+			strength = identite*3;
 			System.out.println("identite = " + identite);
 			System.out.println("aggro = " + aggro);
 			System.out.println("strength = " + strength + "\n");
-			Insecte ins = new Insecte( x, y, identite, aggro, strength, c.maxEnergy);
+			Insecte ins = new Insecte( x, y, identite, aggro, strength, c.maxEnergy, 100);
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
