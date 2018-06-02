@@ -13,7 +13,9 @@ public class Modele extends SimState {
 	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
 	private static final long serialVersionUID = 2598273691291778150L;
-	static Constants c = new Constants(20, 20, 10, 400);
+	
+	static Constants c = new Constants(20, 20, 10, 400, 50, 3, 5, 15);
+
 	public SparseGrid2D grille = new SparseGrid2D(c.grilleL, c.grilleH);
 
 	public Modele(long seed) {
@@ -40,26 +42,19 @@ public class Modele extends SimState {
 		for(int i = 0; i < c.nInsectes; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
-			int identite = (int)Math.ceil(Math.random()*10);
-			double strength = identite*10;
-			double modifAggro = r.nextGaussian();
-			modifAggro *= 0.05;
-			double aggro = 0.5;
-			if(im!=null) {
-				aggro = im.getAggro();
-			}
-			aggro += modifAggro;
-			if(aggro > 1) aggro = 1;
-			else if(aggro < 0.05) aggro = 0.05;
-			Insecte ins = new Insecte(x, y,identite,aggro,strength);
+			identite = (int)Math.ceil(Math.random()*10);
+			aggro = (double)identite/10;
+			strength = identite*3;
 			System.out.println("identite = " + identite);
 			System.out.println("aggro = " + aggro);
 			System.out.println("strength = " + strength + "\n");
+			Insecte ins = new Insecte( x, y, identite, aggro, strength, c.maxEnergy, 100);
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
 			this.insectesVivants.add(ins);
 		}
+		
 		
 //		for(int i = 0; i < 4; i++) {
 //			x = (int) Math.floor(Math.random()*c.grilleL);
@@ -70,8 +65,20 @@ public class Modele extends SimState {
 //			grille.setObjectLocation(groupe, x, y);
 //		}
 		
-		
+		for(int i = 0; i < c.nNourriture; i++) {
+			ajouterNourriture();
+		}
+	
 	}
+	
+	public void ajouterNourriture() {
+		int x, y;
+		x = (int) Math.floor(Math.random()*c.grilleL);
+		y = (int) Math.floor(Math.random()*c.grilleH);
+		Nourriture nourriture = new Nourriture(c.maxFood,x,y);
+		grille.setObjectLocation(nourriture, x, y);
+	}
+	
 	
 	@Override
 	public void finish() {

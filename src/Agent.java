@@ -10,17 +10,21 @@ public abstract class Agent implements Steppable{
 		public double strength = 0;
 		public double aggro = 0;
 		public int identite = 0;
+		public int energie = 0;
+		public int vie = 0;
 		public int x, y;
 		public boolean dead = false;
 		public Stoppable stoppable;
 		
 		
-		public Agent(int x, int y, int identite, double aggro, double strength) {
+		public Agent(int x, int y, int identite, double aggro, double strength, int energie, int vie) {
 			this.x = x;
 			this.y = y;
 			this.identite = identite;
 			this.aggro = aggro;
 			this.strength = strength;
+			this.energie = energie;
+			this.vie = vie;
 		}
 
 		@Override
@@ -30,6 +34,7 @@ public abstract class Agent implements Steppable{
 		public void deplacer(Modele m) {
 			int direction = (int) Math.floor(Math.random()*9);
 			pas(m,direction);
+			consommerEnergie();
 		}
 			
 		private void pas(Modele m, int direction) {
@@ -70,18 +75,39 @@ public abstract class Agent implements Steppable{
 			y = newY;
 		}
 		
-		protected void meurt(Modele modele) {
-			modele.grille.remove(this);
-			stoppable.stop();
+		protected void meurt(Modele modele, Agent agent) {
+			//System.out.println("agent stop!!!");
+			modele.grille.remove(agent);
+			agent.stoppable.stop();
 		}
 		
-//		public double getAggro() {
-//			return aggro;
-//		}
-//		
-//		public double getStrength() {
-//			return strength;
+//		public void attack(Agent agent) {
+//			System.out.println("Agent attaque.");
+////			boolean res = Math.random() > 0.5;
+////			this.dead |= !res;
+////			agent.dead |= res;
+//			
+//			agent.vie -= strength;
+//			System.out.println("agent.vie = " + agent.vie);
+//			if (vie < 0) {
+//				vie = 0;
+//			}
+//			
+//			consommerEnergie();//consommer une unite d'energie
 //		}
 		
+		public double getAggro() {
+			return aggro;
+		}
 		
+		public double getStrength() {
+			return strength;
+		}
+		
+		public abstract void consommerEnergie();
+		
+		public void attackGroupe(Groupe groupe) {
+			Insecte firstIns = groupe.getInsectes().get(0);
+			firstIns.vie -= strength;
+		}
 }
