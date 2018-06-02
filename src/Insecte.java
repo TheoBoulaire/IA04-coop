@@ -3,7 +3,9 @@ import sim.engine.SimState;
 import sim.engine.Stoppable;
 import sim.util.Bag;
 
+
 public class Insecte extends Agent{
+  private int nStep = 0;
 	
 	private static final long serialVersionUID = 31265800453373745L;
 	
@@ -126,6 +128,7 @@ public class Insecte extends Agent{
 	}
 
 
+
 	private boolean mangersource(Modele m){
 		for(int i = x-1; i<x+2; i++){
 			for(int j = y-1; j<y+2; j++){
@@ -141,14 +144,14 @@ public class Insecte extends Agent{
 		return false;
 	}
 	
+
 	private void mange(){
 		if(energie > c.maxEnergy-c.foodEnergy)
 			energie = c.maxEnergy;
 		else 
 			energie += c.foodEnergy;			
 	}
-	
-	
+
 	public Groupe getMyGroupe() {
 		return myGroupe;
 	}
