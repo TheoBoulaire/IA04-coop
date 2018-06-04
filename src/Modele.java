@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Stack;
-import java.util.Random;
 
 import sim.engine.SimState;
 import sim.engine.Stoppable;
@@ -8,15 +7,14 @@ import sim.field.grid.SparseGrid2D;
 
 public class Modele extends SimState {
 	
-
-	private IdentiteModele im = null;
-	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
-	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
 	private static final long serialVersionUID = 2598273691291778150L;
 	
 	static Constants c = new Constants(20, 20, 10, 400, 50, 3, 5, 15);
-
+	private IdentiteModele im = null;
 	public SparseGrid2D grille = new SparseGrid2D(c.grilleL, c.grilleH);
+	public Stack<Double> aggroMorts = new Stack<Double>();
+	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
+	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
 
 	public Modele(long seed) {
 		super(seed);
@@ -31,14 +29,16 @@ public class Modele extends SimState {
 		Visualisation.constants = c;
 	}
 	
+	
 	@Override
 	public void start() {
 		super.start();
 		grille.clear();
 		//pos agents
 		int x, y;
-
-		Random r = new Random();
+		int identite;
+		double aggro;
+		double strength;
 		for(int i = 0; i < c.nInsectes; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
@@ -52,7 +52,6 @@ public class Modele extends SimState {
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
-			this.insectesVivants.add(ins);
 		}
 		
 		
@@ -82,7 +81,8 @@ public class Modele extends SimState {
 	
 	@Override
 	public void finish() {
-		super.finish();
+		System.out.println(this.aggroMorts);
+		this.aggroMorts.clear();
 	}
 	
 	public void hearIsDead(Insecte ins) {
@@ -136,4 +136,6 @@ public class Modele extends SimState {
 	public void setGrille(SparseGrid2D grille) {
 		this.grille = grille;
   }
+	
+	
 }
