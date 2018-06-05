@@ -3,12 +3,11 @@ import sim.engine.SimState;
 import sim.engine.Stoppable;
 import sim.util.Bag;
 
-
 public class Insecte extends Agent{
-  private int nStep = 0;
 	
 	private static final long serialVersionUID = 31265800453373745L;
 	
+	private int nStep = 0;
 	private Groupe myGroupe = null;
 	
 	public Insecte(int x, int y, int identite, double aggro, double strength, int energie, int vie) {
@@ -30,16 +29,22 @@ public class Insecte extends Agent{
 				if(ennemy != null && ennemy.vie > 0) {
 					fight(ennemy, m);
 					if(vie <= 0 || energie == 0) {
-						System.out.println("Insecte meurt. \n");
+						System.out.println("\n Insecte meurt. \n");
 						m.aggroMorts.push(aggro);
 						meurt(m, this);
 					}
 				}else {
-					System.out.println("Insecte deplace. \n");
+					System.out.println("\n Insecte deplace. \n");
 					deplacer(m);
 				}
 				roundDone = true;
 			}
+			
+			nStep++;
+			if(nStep > 20000) {
+				m.end();
+			}
+			
 		}else {
 			System.out.println("Insecte meurt.");
 			m.aggroMorts.push(aggro);
@@ -47,6 +52,20 @@ public class Insecte extends Agent{
 		}
 	}
 	
+//	@Override
+//	public void step(SimState ss) {
+//		Modele m = (Modele) ss;
+//		deplacer(m);
+//		Agent ennemy = samePlace(m);
+//		fight(ennemy, m);
+//		if(dead) {
+//			die(m);
+//		}
+//		nStep++;
+//		if(nStep > 20000) {
+//			m.end();
+//		}
+//	}
 	
 	private Agent samePlace(Modele m) {
 		Bag b = m.grille.getObjectsAtLocation(x, y);
@@ -85,7 +104,10 @@ public class Insecte extends Agent{
 		
 		if(agent instanceof Groupe) {
 			Groupe grp = (Groupe) agent;
-			attackGroupe(grp);
+			if(grp.getInsectes().size() > 1)
+				attackGroupe(grp);
+			else
+				return;
 		}
 		System.out.println("avant attaque agent.vie = " + agent.vie);
 		agent.vie -= strength;
@@ -128,7 +150,6 @@ public class Insecte extends Agent{
 	}
 
 
-
 	private boolean mangersource(Modele m){
 		for(int i = x-1; i<x+2; i++){
 			for(int j = y-1; j<y+2; j++){
@@ -144,14 +165,14 @@ public class Insecte extends Agent{
 		return false;
 	}
 	
-
 	private void mange(){
 		if(energie > c.maxEnergy-c.foodEnergy)
 			energie = c.maxEnergy;
 		else 
 			energie += c.foodEnergy;			
 	}
-
+	
+	
 	public Groupe getMyGroupe() {
 		return myGroupe;
 	}
@@ -164,4 +185,9 @@ public class Insecte extends Agent{
 	public void consommerEnergie() {
 		energie--;
 	}
+	
+//	public void die(Modele m) {
+//		stoppable.stop();
+//		m.hearIsDead(this);
+//	}
 }
