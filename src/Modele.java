@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 import sim.engine.SimState;
@@ -39,30 +40,36 @@ public class Modele extends SimState {
 		int identite;
 		double aggro;
 		double strength;
+		Random r = new Random();
 		for(int i = 0; i < c.nInsectes; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
 			identite = (int)Math.ceil(Math.random()*10);
-			aggro = (double)identite/10;
 			strength = identite*3;
+//			aggro = (double)identite/10;
+			
+			double modifAggro = r.nextGaussian();
+ 			modifAggro *= 0.05;
+ 			aggro = 0.5;
+ 			if(im!=null) {
+ 				aggro = im.getAggro();
+ 			}
+ 			aggro += modifAggro;
+ 			if(aggro > 1) 
+ 				aggro = 1;
+ 			else if(aggro < 0.05) 
+ 				aggro = 0.05;
 			System.out.println("identite = " + identite);
 			System.out.println("aggro = " + aggro);
 			System.out.println("strength = " + strength + "\n");
+			
+			
 			Insecte ins = new Insecte( x, y, identite, aggro, strength, c.maxEnergy, 100);
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
+			this.insectesVivants.add(ins);
 		}
-		
-		
-//		for(int i = 0; i < 4; i++) {
-//			x = (int) Math.floor(Math.random()*c.grilleL);
-//			y = (int) Math.floor(Math.random()*c.grilleH);
-//			Groupe groupe = new Groupe(x, y, Math.random(), (int)(Math.random()*20) ,(int)(Math.random()*10));
-//			Stoppable stoppable = schedule.scheduleRepeating(groupe); 
-//			groupe.stoppable = stoppable;
-//			grille.setObjectLocation(groupe, x, y);
-//		}
 		
 		for(int i = 0; i < c.nNourriture; i++) {
 			ajouterNourriture();
@@ -81,27 +88,30 @@ public class Modele extends SimState {
 	
 	@Override
 	public void finish() {
+		super.finish();
 		System.out.println(this.aggroMorts);
 		this.aggroMorts.clear();
 	}
 	
 	public void hearIsDead(Insecte ins) {
-		System.out.println("Un mort.");
-		this.grille.remove(ins);
+//		System.out.println("Un mort.");
 		this.insectesVivants.remove(ins);
 		this.pileMorts.add(ins);
 		if(insectesVivants.size() == 1) {
 			System.out.println("Tentative fin.");
-			insectesVivants.get(0).die(this);
+//			insectesVivants.get(0).die(this);
+			Insecte lastInsecte = insectesVivants.get(0);
+			lastInsecte.meurt(this, lastInsecte);
 			System.out.println("Fin.");
 		}
-		System.out.println("Est mort.");
+//		System.out.println("Est mort.");
 	}
 	
 	public void end() {
 		ArrayList<Insecte> aTuer = (ArrayList<Insecte>) insectesVivants.clone();
 		for(Insecte i : aTuer) {
-			i.die(this);
+//			i.die(this);
+			i.meurt(this, i);
 		}
 	}
 

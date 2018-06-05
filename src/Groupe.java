@@ -119,7 +119,10 @@ public class Groupe extends Agent{
 		
 		if(agent instanceof Groupe) {
 			Groupe grp = (Groupe) agent;
-			attackGroupe(grp);
+			if(grp.getInsectes().size() > 1)
+				attackGroupe(grp);
+			else
+				return;
 		}
 		System.out.println("avant attaque agent.vie = " + agent.vie);
 		agent.vie -= strength;
@@ -127,7 +130,7 @@ public class Groupe extends Agent{
 		if (vie < 0) {
 			vie = 0;
 		}
-		consommerEnergie();//consommer une unite d'energie
+		consommerEnergie();
 	}
 	
 	private void join(Agent agent, Modele modele) {

@@ -29,16 +29,22 @@ public class Insecte extends Agent{
 				if(ennemy != null && ennemy.vie > 0) {
 					fight(ennemy, m);
 					if(vie <= 0 || energie == 0) {
-						System.out.println("Insecte meurt. \n");
+						System.out.println("\n Insecte meurt. \n");
 						m.aggroMorts.push(aggro);
 						meurt(m, this);
 					}
 				}else {
-					System.out.println("Insecte deplace. \n");
+					System.out.println("\n Insecte deplace. \n");
 					deplacer(m);
 				}
 				roundDone = true;
 			}
+			
+			nStep++;
+			if(nStep > 20000) {
+				m.end();
+			}
+			
 		}else {
 			System.out.println("Insecte meurt.");
 			m.aggroMorts.push(aggro);
@@ -98,7 +104,10 @@ public class Insecte extends Agent{
 		
 		if(agent instanceof Groupe) {
 			Groupe grp = (Groupe) agent;
-			attackGroupe(grp);
+			if(grp.getInsectes().size() > 1)
+				attackGroupe(grp);
+			else
+				return;
 		}
 		System.out.println("avant attaque agent.vie = " + agent.vie);
 		agent.vie -= strength;
@@ -177,8 +186,8 @@ public class Insecte extends Agent{
 		energie--;
 	}
 	
-	public void die(Modele m) {
-		stoppable.stop();
-		m.hearIsDead(this);
-	}
+//	public void die(Modele m) {
+//		stoppable.stop();
+//		m.hearIsDead(this);
+//	}
 }

@@ -79,22 +79,11 @@ public abstract class Agent implements Steppable{
 			//System.out.println("agent stop!!!");
 			modele.grille.remove(agent);
 			agent.stoppable.stop();
+			if(agent instanceof Insecte) {
+				modele.hearIsDead((Insecte) agent);
+			}
 		}
 		
-//		public void attack(Agent agent) {
-//			System.out.println("Agent attaque.");
-////			boolean res = Math.random() > 0.5;
-////			this.dead |= !res;
-////			agent.dead |= res;
-//			
-//			agent.vie -= strength;
-//			System.out.println("agent.vie = " + agent.vie);
-//			if (vie < 0) {
-//				vie = 0;
-//			}
-//			
-//			consommerEnergie();//consommer une unite d'energie
-//		}
 		
 		public double getAggro() {
 			return aggro;
