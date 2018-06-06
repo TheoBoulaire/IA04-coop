@@ -11,8 +11,8 @@ public class Groupe extends Agent{
 
 	private List<Insecte> insectes;
 
-	public Groupe(int x, int y, int identite, double aggro, double strength) {
-		super(x, y, identite, aggro, strength);
+	public Groupe(int x, int y) {
+		super(x, y);
 		insectes = new ArrayList<>();
 	}
 
@@ -24,9 +24,7 @@ public class Groupe extends Agent{
 		Agent ennemy = samePlace(m);
 		fight(ennemy, m);
 		if(dead) {
-			m.grille.remove(this);
-			m.aggroMorts.push(aggro);
-			stoppable.stop();
+			this.die(m);
 			//System.out.println("Je meurs.");
 		}
 	}
@@ -50,10 +48,10 @@ public class Groupe extends Agent{
 	
 	private void fight(Agent agent, Modele modele) {
 		if(agent != null) {
-			if(this.identite > agent.identite) {
+			if(this.getIdentite() > agent.getIdentite()) {
 				System.out.println("Un groupe rencontre un ennemi plus faible");
 				attack(agent);
-			}else if(this.identite == agent.identite){
+			}else if(this.getIdentite() == agent.getIdentite()){
 				join(agent, modele);
 			}else {
 				System.out.println("Un groupe rencontre un ennemi plus fort");
@@ -74,7 +72,6 @@ public class Groupe extends Agent{
 			System.out.println("Deux groupes joignent ensemble.\n");
 			Groupe grp = (Groupe)agent;
 			insectes.addAll(grp.getInsectes());
-			strength += grp.strength;
 			grp.getInsectes().clear();
 			modele.grille.remove(grp);
 			grp.stoppable.stop();
@@ -93,12 +90,13 @@ public class Groupe extends Agent{
 		}
 	}
 	
-	public void quitterGroupe(Insecte insecte) {
+	public void removeFromGroupe(Insecte insecte) {
 		if(insectes.contains(insecte)) {
 			insectes.remove(insecte);
 		}
 	}
 	
+	/*
 	private void updateAggro() {
 		double sum = 0;
 		for(Insecte insecte : insectes) {
@@ -106,10 +104,46 @@ public class Groupe extends Agent{
 		}
 		this.aggro = sum/insectes.size(); 
 	}
+	*/
 	
+	public void die(Modele m) {
+		super.die(m);
+		for(Insecte i : insectes) {
+			i.die(m);
+		}
+	}
 	
 	public List<Insecte> getInsectes() {
 		return insectes;
+	}
+
+	
+	@Override
+	public double getStrength() {
+		double str = 0;
+		for(Insecte ins : insectes) {
+			str += ins.getStrength();
+		}
+		return str;
+	}
+	
+	@Override
+	public double getAggro() {
+		double agr = 0;
+		for(Insecte ins : insectes) {
+			if(ins.getAggro() > agr) agr = ins.getAggro();
+		}
+		return agr;
+	}
+	
+	@Override
+	public double getIdentite() {
+		double id = 0;
+		int n = insectes.size();
+		for(Insecte ins : insectes) {
+			id += ins.getIdentite();
+		}
+		return id/n;
 	}
 
 }

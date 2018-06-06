@@ -5,14 +5,21 @@ import sim.util.Bag;
 
 
 public class Insecte extends Agent{
-  private int nStep = 0;
+	private int nStep = 0;
+	
+	private int identite;
+	private double aggro;
+	private double strength;
 	
 	private static final long serialVersionUID = 31265800453373745L;
 	
 	private Groupe myGroupe = null;
 	
 	public Insecte(int x, int y, int identite, double aggro, double strength) {
-		super(x, y, identite, aggro, strength);
+		super(x, y);
+		this.identite = identite;
+		this.aggro = aggro;
+		this.strength = strength;
 	}
 	
 	private Agent samePlace(Modele m) {
@@ -33,10 +40,10 @@ public class Insecte extends Agent{
 	
 	private void fight(Agent agent, Modele modele) {
 		if(agent != null) {
-			if(this.identite > agent.identite) {
+			if(this.identite > agent.getIdentite()) {
 				System.out.println("Un insecte rencontre un ennemi plus faible");
 				attack(agent);
-			}else if(this.identite == agent.identite){
+			}else if(this.identite == agent.getIdentite()){
 				join(agent, modele);
 			}else {
 				System.out.println("Un insecte rencontre un ennemi plus fort");
@@ -57,7 +64,7 @@ public class Insecte extends Agent{
 			if(agent instanceof Insecte) {//Deux insectes joignent ensemble.
 				System.out.println("Deux insectes joignent ensemble.\n");
 				Insecte ins = (Insecte)agent;
-				Groupe groupe = new Groupe(x, y, identite, aggro, strength+ins.strength);
+				Groupe groupe = new Groupe(x, y);
 				myGroupe = groupe;
 				if(ins.getMyGroupe() == null) {
 					ins.setMyGroupe(groupe);
@@ -74,7 +81,7 @@ public class Insecte extends Agent{
 				myGroupe = groupe;
 			}
 		}
-		meurt(modele);
+		die(modele);
 	}
 	
 	@Override
@@ -95,7 +102,7 @@ public class Insecte extends Agent{
 	
 	
 	public void die(Modele m) {
-		stoppable.stop();
+		super.die(m);
 		m.hearIsDead(this);
 	}
 
@@ -107,4 +114,16 @@ public class Insecte extends Agent{
 		this.myGroupe = myGroupe;
 	}
 	
+	@Override
+	public double getAggro() {
+		return aggro;
+	}
+	@Override
+	public double getStrength() {
+		return strength;
+	}
+	@Override
+	public double getIdentite() {
+		return (double) identite;
+	}
 }

@@ -7,7 +7,7 @@ public class MainTestGene {
 	}
 	public static void runUI() {
 		ModeleFactory mf = new ModeleFactory();
-		mf.chainModeles(1000);
+		mf.chainModeles(100);
 		for(IdentiteModele im : mf.ids) {
 			if(im!=null) System.out.println(im.getAggro());
 		}

@@ -7,20 +7,19 @@ public abstract class Agent implements Steppable{
 		private static final long serialVersionUID = -3914618152121113732L;
 	
 		public static Constants c;
+		/*
 		public double strength = 0;
 		public double aggro = 0;
 		public int identite = 0;
+		*/
 		public int x, y;
 		public boolean dead = false;
 		public Stoppable stoppable;
 		
 		
-		public Agent(int x, int y, int identite, double aggro, double strength) {
+		public Agent(int x, int y) {
 			this.x = x;
 			this.y = y;
-			this.identite = identite;
-			this.aggro = aggro;
-			this.strength = strength;
 		}
 
 		@Override
@@ -70,11 +69,6 @@ public abstract class Agent implements Steppable{
 			y = newY;
 		}
 		
-		protected void meurt(Modele modele) {
-			modele.grille.remove(this);
-			stoppable.stop();
-		}
-		
 //		public double getAggro() {
 //			return aggro;
 //		}
@@ -82,6 +76,13 @@ public abstract class Agent implements Steppable{
 //		public double getStrength() {
 //			return strength;
 //		}
+
+		public void die(Modele m) {
+			stoppable.stop();
+			m.grille.remove(this);
+		}
 		
-		
+		public abstract double getStrength();
+		public abstract double getAggro();
+		public abstract double getIdentite();
 }

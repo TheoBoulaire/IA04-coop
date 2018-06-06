@@ -78,6 +78,21 @@ public class Modele extends SimState {
 		super.finish();
 	}
 	
+	/*
+	public void hearIsDead(Agent ag) {
+		System.out.println("Un mort.");
+		this.grille.remove(ag);
+		this.insectesVivants.remove(ag);
+		this.pileMorts.add(ag);
+		if(insectesVivants.size() == 1) {
+			System.out.println("Tentative fin.");
+			insectesVivants.get(0).die(this);
+			System.out.println("Fin.");
+		}
+		System.out.println("Est mort.");
+	}
+	*/
+	
 	public void hearIsDead(Insecte ins) {
 		System.out.println("Un mort.");
 		this.grille.remove(ins);
