@@ -16,6 +16,7 @@ public class Modele extends SimState {
 	public Stack<Double> aggroMorts = new Stack<Double>();
 	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
+	public Stack<Double> aggroNaissances = new Stack<Double>();
 
 	public Modele(long seed) {
 		super(seed);
@@ -30,7 +31,7 @@ public class Modele extends SimState {
 		Visualisation.constants = c;
 	}
 	
-	private double createRandAggro(Random r) {
+	public double createRandAggro(Random r) {
 		double modifAggro = r.nextGaussian();
 		modifAggro *= 0.05;
 		double aggro = 0.5;
@@ -43,6 +44,39 @@ public class Modele extends SimState {
 		else if(aggro < 0.05) 
 			aggro = 0.05;
 		return aggro;
+	}
+	
+	public double createRandAggro(Random r, double aggro) {
+		double modifAggro = r.nextGaussian();
+		modifAggro *= 0.05;
+		if(im!=null) {
+			aggro = im.getAggro();
+		}
+		aggro += modifAggro;
+		if(aggro > 1) 
+			aggro = 1;
+		else if(aggro < 0.05) 
+			aggro = 0.05;
+		return aggro;
+	}
+	
+	public ArrayList<Double> createRandAggroTab(Random r, ArrayList<Double> aggroTab) {
+		ArrayList<Double> ret = new ArrayList<Double>();
+		for(int i = 0; i < 10; i++) {
+			double modifAggro = r.nextGaussian();
+			modifAggro *= 0.05;
+			double aggro = aggroTab.get(i);
+			if(im!=null) {
+				aggro = im.getAggro();
+			}
+			aggro += modifAggro;
+			if(aggro > 1) 
+				aggro = 1;
+			else if(aggro < 0.05) 
+				aggro = 0.05;
+			ret.add(aggro);
+		}
+		return ret;
 	}
 	
 	private ArrayList<Double> createRandAggroTab(Random r) {
@@ -92,16 +126,21 @@ public class Modele extends SimState {
 			*/
 			
 			Insecte ins = new Insecte(x, y, this, identite, aggro, aggroTab, strength, c.maxEnergy, 100);
-			Stoppable stoppable = schedule.scheduleRepeating(ins); 
-			ins.stoppable = stoppable;
-			grille.setObjectLocation(ins, x, y);
-			this.insectesVivants.add(ins);
+			addInsecte(ins);
 		}
 		
 		for(int i = 0; i < c.nNourriture; i++) {
 			ajouterNourriture();
 		}
 	
+	}
+	
+	public void addInsecte(Insecte ins) {
+		Stoppable stoppable = schedule.scheduleRepeating(ins); 
+		ins.stoppable = stoppable;
+		grille.setObjectLocation(ins, ins.x, ins.y);
+		this.insectesVivants.add(ins);
+		aggroNaissances.push(ins.getAggro());
 	}
 	
 	public void ajouterNourriture() {
