@@ -1,8 +1,12 @@
+import sim.engine.SimState;
+import sim.engine.Steppable;
+import sim.engine.Stoppable;
 
-public class Nourriture{
+public class Nourriture implements Steppable{
 	
 	static Constants c;
 	int quantite;
+	public Stoppable stoppable;
 	private int x;
 	private int y;
 	
@@ -15,11 +19,8 @@ public class Nourriture{
 	
 	public void croc(Modele m){
 		quantite -= 1;
-		if(quantite == 0){
-			m.grille.remove(this);
-			m.ajouterNourriture();
-		}
-		
+	
+
 	}
 	
 	public int getQuantite() {
@@ -32,6 +33,17 @@ public class Nourriture{
 
 	public int getY() {
 		return y;
+	}
+	
+	public boolean estDisponible() {
+		return quantite > 0;
+	}
+	
+
+	@Override
+	public void step(SimState arg0) {
+		quantite++;
+		
 	}
 
 }

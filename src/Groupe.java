@@ -327,4 +327,8 @@ public class Groupe extends Agent {
 		}
 		return list;
 	}
+	
+	public String toString() {
+		return String.valueOf(insectes.size());		
+	}
 }

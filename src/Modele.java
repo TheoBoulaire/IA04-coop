@@ -16,6 +16,7 @@ public class Modele extends SimState {
 	public Stack<Double> aggroMorts = new Stack<Double>();
 	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
+	public Stack<Double> aggroNaissances = new Stack<Double>();
 
 	public Modele(long seed) {
 		super(seed);
@@ -30,7 +31,7 @@ public class Modele extends SimState {
 		Visualisation.constants = c;
 	}
 	
-	private double createRandAggro(Random r) {
+	public double createRandAggro(Random r) {
 		double modifAggro = r.nextGaussian();
 		modifAggro *= 0.05;
 		double aggro = 0.5;
@@ -43,6 +44,39 @@ public class Modele extends SimState {
 		else if(aggro < 0.05) 
 			aggro = 0.05;
 		return aggro;
+	}
+	
+	public double createRandAggro(Random r, double aggro) {
+		double modifAggro = r.nextGaussian();
+		modifAggro *= 0.05;
+		if(im!=null) {
+			aggro = im.getAggro();
+		}
+		aggro += modifAggro;
+		if(aggro > 1) 
+			aggro = 1;
+		else if(aggro < 0.05) 
+			aggro = 0.05;
+		return aggro;
+	}
+	
+	public ArrayList<Double> createRandAggroTab(Random r, ArrayList<Double> aggroTab) {
+		ArrayList<Double> ret = new ArrayList<Double>();
+		for(int i = 0; i < 10; i++) {
+			double modifAggro = r.nextGaussian();
+			modifAggro *= 0.05;
+			double aggro = aggroTab.get(i);
+			if(im!=null) {
+				aggro = im.getAggro();
+			}
+			aggro += modifAggro;
+			if(aggro > 1) 
+				aggro = 1;
+			else if(aggro < 0.05) 
+				aggro = 0.05;
+			ret.add(aggro);
+		}
+		return ret;
 	}
 	
 	private ArrayList<Double> createRandAggroTab(Random r) {
@@ -69,6 +103,14 @@ public class Modele extends SimState {
 	public void start() {
 		super.start();
 		grille.clear();
+		for(int i = 0; i < c.grilleL; i++) {
+			for(int j = 0; j < c.grilleL; j++) {
+				Nourriture nourriture = new Nourriture(3,i,j);
+				Stoppable stoppable = schedule.scheduleRepeating(nourriture); 
+				nourriture.stoppable = stoppable;
+				grille.setObjectLocation(nourriture, i, j);
+			}
+		}
 		//pos agents
 		int x, y;
 		int identite;
@@ -120,10 +162,15 @@ public class Modele extends SimState {
 			this.insectesVivants.add(ins);
 		}
 		
-		for(int i = 0; i < c.nNourriture; i++) {
-			ajouterNourriture();
-		}
 	
+	}
+	
+	public void addInsecte(Insecte ins) {
+		Stoppable stoppable = schedule.scheduleRepeating(ins); 
+		ins.stoppable = stoppable;
+		grille.setObjectLocation(ins, ins.x, ins.y);
+		this.insectesVivants.add(ins);
+		aggroNaissances.push(ins.getAggro());
 	}
 	
 	public void ajouterNourriture() {
@@ -209,7 +256,9 @@ public class Modele extends SimState {
 
 	public void setGrille(SparseGrid2D grille) {
 		this.grille = grille;
-  }
-	
+	}
+	public ArrayList<Insecte> getInsectesVivants(){
+		return this.insectesVivants;
+	}
 	
 }
