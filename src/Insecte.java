@@ -6,15 +6,15 @@ import sim.engine.SimState;
 import sim.engine.Stoppable;
 import sim.util.Bag;
 
-public class Insecte extends Agent{
+public abstract class Insecte extends Agent{
 	
-	private int identite;
-	private double aggro;
-	private double strength;
-	private int energie;
-	private double vie;
+	public int identite;
+	public double aggro;
+	public double strength;
+	public int energie;
+	public double vie;
 	private static final long serialVersionUID = 31265800453373745L;
-	private Groupe myGroupe = null;
+	public Groupe myGroupe = null;
 	private ArrayList<Double> idAggros;
 	
 	public Insecte(int x, int y, Modele m, int identite, double aggro, ArrayList<Double> idAggros, double strength, int energie, double vie) {
@@ -139,13 +139,15 @@ public class Insecte extends Agent{
 		return false;
 	}*/
 	
-	protected void mange(Nourriture n) {
-		while(energie < c.maxEnergy && n.getQuantite() > 0) {
-			energie += c.foodEnergy;
-			if(energie > c.maxEnergy) energie = c.maxEnergy;
-			n.croc(modele);
-		}
-	}
+	
+	
+//	protected void mange(Nourriture n) {
+//		while(energie < c.maxEnergy && n.getQuantite() > 0) {
+//			energie += c.foodEnergy;
+//			if(energie > c.maxEnergy) energie = c.maxEnergy;
+//			n.croc(modele);
+//		}
+//	}
 	
 	public void die() {
 		this.dead = true;
@@ -187,15 +189,15 @@ public class Insecte extends Agent{
 	public int getEnergie() {
 		return energie;
 	}
+	
 	@Override
 	public void endureAttack(Agent ag) {
-		endureHit(ag.getStrength());
+		endureHit(ag);
 	}
 	
-	public void endureHit(double str) {
-		this.vie -= str;
-		if(vie < 0) this.die();
-	}
+	
+	public abstract void endureHit(Agent ag);
+	
 //	public void die(Modele m) {
 //		stoppable.stop();
 //		m.hearIsDead(this);
@@ -211,7 +213,7 @@ public class Insecte extends Agent{
 		} else if(a instanceof Insecte) {
 			Groupe g = new Groupe(x, y, modele);
 			Insecte i = (Insecte) a;
-			removeFromSchedule();
+			removeFromSchedule(); 
 			g.addInsecte(this);
 			i.removeFromSchedule();
 			g.addInsecte(i);
@@ -234,10 +236,5 @@ public class Insecte extends Agent{
 	}
 
 	@Override
-	protected void phaseNourriture() {
-		Nourriture n = foodHere();
-		if(n != null) {
-			mange(n);
-		}
-	}
+	protected void phaseNourriture() {}
 }

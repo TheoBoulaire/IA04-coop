@@ -76,7 +76,7 @@ public class Modele extends SimState {
 		double strength;
 		ArrayList<Double> aggroTab;
 		Random r = new Random();
-		for(int i = 0; i < c.nInsectes; i++) {
+		for(int i = 0; i < c.nInsectes - 2; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
 			identite = (int) Math.floor(Math.random()*10);
@@ -91,7 +91,29 @@ public class Modele extends SimState {
 			System.out.println("strength = " + strength + "\n");
 			*/
 			
-			Insecte ins = new Insecte(x, y, this, identite, aggro, aggroTab, strength, c.maxEnergy, 100);
+			InsecteHerb ins = new InsecteHerb(x, y, this, identite, aggro, aggroTab, strength, c.maxEnergy, 100);
+			Stoppable stoppable = schedule.scheduleRepeating(ins); 
+			ins.stoppable = stoppable;
+			grille.setObjectLocation(ins, x, y);
+			this.insectesVivants.add(ins);
+		}
+		
+		for(int i = 0; i < 2; i++) {
+			x = (int) Math.floor(Math.random()*c.grilleL);
+			y = (int) Math.floor(Math.random()*c.grilleH);
+			identite = (int) Math.floor(Math.random()*10);
+			strength = identite*3;
+//			aggro = (double)identite/10;
+			
+			aggro = createRandAggro(r);
+			aggroTab = createRandAggroTab(r);
+			/*
+			System.out.println("identite = " + identite);
+			System.out.println("aggro = " + aggro);
+			System.out.println("strength = " + strength + "\n");
+			*/
+			
+			InsecteCarn ins = new InsecteCarn(x, y, this, identite, aggro, aggroTab, strength, c.maxEnergy, 100);
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
