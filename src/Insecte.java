@@ -248,7 +248,7 @@ public abstract class Insecte extends Agent{
 		Random r = new Random();
 		double nAggro = modele.createRandAggro(r, aggro);
 		ArrayList<Double> nAggroTab = modele.createRandAggroTab(r, idAggros);
-		Insecte ins = new Insecte(x, y, modele, identite, nAggro, nAggroTab, strength, (int) Math.floor(c.maxEnergy/2.0), 100);
+		InsecteHerb ins = new InsecteHerb(x, y, modele, identite, nAggro, nAggroTab, strength, (int) Math.floor(c.maxEnergy/2.0), 100);
 		return ins;
 	}
 
