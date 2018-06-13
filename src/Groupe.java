@@ -313,4 +313,8 @@ public class Groupe extends Agent {
 			}
 		}
 	}
+	
+	public String toString() {
+		return String.valueOf(insectes.size());		
+	}
 }

@@ -187,7 +187,9 @@ public class Modele extends SimState {
 
 	public void setGrille(SparseGrid2D grille) {
 		this.grille = grille;
-  }
-	
+	}
+	public ArrayList<Insecte> getInsectesVivants(){
+		return this.insectesVivants;
+	}
 	
 }
