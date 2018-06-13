@@ -12,6 +12,7 @@ import sim.engine.SimState;
 import sim.portrayal.DrawInfo2D;
 import sim.portrayal.Inspector;
 import sim.portrayal.SimplePortrayal2D;
+import sim.portrayal.grid.DrawPolicy;
 import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.FacetedPortrayal2D;
 import sim.portrayal.simple.HexagonalPortrayal2D;
@@ -63,9 +64,8 @@ public class Visualisation extends GUIState {
 			case 0 : 
 				ShapePortrayal2D a = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_BOWTIE, ShapePortrayal2D.Y_POINTS_BOWTIE) {
 					public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-						int R = (int) Math.abs(i.getAggro() * 255);
-						int V = (int) Math.abs(i.getAggro() * 255);
-						paint = new Color(R, V, 0);
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 					}
 				});
@@ -75,9 +75,8 @@ public class Visualisation extends GUIState {
 			case 1 : 
 				ShapePortrayal2D b = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_DIAMOND, ShapePortrayal2D.Y_POINTS_DIAMOND) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -87,9 +86,8 @@ public class Visualisation extends GUIState {
 			case 2 : 
 				ShapePortrayal2D c = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HEXAGON, ShapePortrayal2D.Y_POINTS_HEXAGON) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -100,9 +98,8 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D d = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HEXAGON_ROTATED,
 					ShapePortrayal2D.Y_POINTS_HEXAGON_ROTATED) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -113,9 +110,8 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D e = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HOURGLASS,
 					ShapePortrayal2D.Y_POINTS_HOURGLASS) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -125,9 +121,8 @@ public class Visualisation extends GUIState {
 			case 5 :
 				ShapePortrayal2D f = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_OCTAGON, ShapePortrayal2D.Y_POINTS_OCTAGON) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -137,9 +132,8 @@ public class Visualisation extends GUIState {
 			case 6 :
 				ShapePortrayal2D g = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_SQUARE, ShapePortrayal2D.Y_POINTS_SQUARE) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -149,9 +143,8 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D h = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_DOWN,
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_DOWN) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -162,9 +155,8 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D k = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_LEFT,
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_LEFT) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -174,9 +166,8 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D l = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_RIGHT,
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_RIGHT) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(i.getAggro() * 255);
-					int V = (int) Math.abs(i.getAggro() * 255);
-					paint = new Color(R, V, 0);
+					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
 				});
@@ -310,17 +301,135 @@ public class Visualisation extends GUIState {
 		};
 		return r;
 	}
+	
+	
 
-	private RectanglePortrayal2D getNourriturePortrayal() {
-		RectanglePortrayal2D r = new RectanglePortrayal2D() {
-			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Nourriture nou = (Nourriture) object;
-				paint = new Color(255, 0, 0);
-				super.draw(object, graphics, info);
-			}
-		};
-		return r;
+//	private RectanglePortrayal2D getNourriturePortrayal() {
+//		RectanglePortrayal2D r = new RectanglePortrayal2D() {
+//			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+//				Nourriture nou = (Nourriture) object;
+//				Color c;
+//				switch(nou.quantite) {
+//				case 0 :
+//					c = new Color (255,255,255);
+//					break;
+//				case 1 :
+//					c = new Color ( 234, 250, 241 );
+//					break;
+//				case 2 :
+//					c = new Color ( 213, 245, 227 );
+//					break;
+//				case 3 :
+//					c = new Color ( 171, 235, 198 );
+//					break;
+//				case 4 :
+//					c = new Color ( 130, 224, 170 );
+//					break;
+//				case 5 :
+//					c = new Color ( 88, 214, 141 );
+//					break;
+//				case 6 :
+//					c = new Color ( 46, 204, 113 );
+//					break;
+//				case 7 :
+//					c = new Color ( 40, 180, 99 );
+//					break;
+//				case 8 :
+//					c = new Color ( 35, 155, 86 );
+//					break;
+//				case 9 :
+//					c = new Color ( 29, 131, 72 );
+//					break;
+//				default:
+//					c = new Color ( 24, 106, 59 );
+//					break;					
+//				}
+//				paint = c;
+//				super.draw(object, graphics, info);
+//			}
+//		};
+//		return r;
+//	}
+	
+	private FacetedPortrayal2D getNourriturePortrayal() {
+	SimplePortrayal2D[] portrayals = new SimplePortrayal2D[11];
+	portrayals[0] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color (255,255,255);
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[1] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color ( 234, 250, 241 );
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[2] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color (213, 245, 227);
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[3] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color ( 171, 235, 198 );
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[4] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color (130, 224, 170 );
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[5] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color ( 88, 214, 141);
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[6] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color ( 46, 204, 113 );
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[7] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color ( 40, 180, 99 );
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[8] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color (35, 155, 86);
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[9] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color (29, 131, 72);
+			super.draw(object, graphics, info);
+		}
+	};
+	portrayals[10] = new RectanglePortrayal2D() {
+		public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+			paint = new Color ( 24, 106, 59);
+			super.draw(object, graphics, info);
+		}
+	};
+	FacetedPortrayal2D fPortrayal = new FacetedPortrayal2D(portrayals) {
+		@Override
+		public int getChildIndex(Object object, int numIndices) {
+			Nourriture nou = (Nourriture) object;
+			if(nou.quantite <10) return nou.quantite;
+			else return 10;
+		}
+	};
+	return fPortrayal;
 	}
+	
 
 	public void init(Controller c) {
 		super.init(c);

@@ -69,6 +69,14 @@ public class Modele extends SimState {
 	public void start() {
 		super.start();
 		grille.clear();
+		for(int i = 0; i < c.grilleL; i++) {
+			for(int j = 0; j < c.grilleL; j++) {
+				Nourriture nourriture = new Nourriture(3,i,j);
+				Stoppable stoppable = schedule.scheduleRepeating(nourriture); 
+				nourriture.stoppable = stoppable;
+				grille.setObjectLocation(nourriture, i, j);
+			}
+		}
 		//pos agents
 		int x, y;
 		int identite;
@@ -98,9 +106,6 @@ public class Modele extends SimState {
 			this.insectesVivants.add(ins);
 		}
 		
-		for(int i = 0; i < c.nNourriture; i++) {
-			ajouterNourriture();
-		}
 	
 	}
 	

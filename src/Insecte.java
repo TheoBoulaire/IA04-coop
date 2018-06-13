@@ -237,7 +237,9 @@ public class Insecte extends Agent{
 	protected void phaseNourriture() {
 		Nourriture n = foodHere();
 		if(n != null) {
-			mange(n);
+			if(n.estDisponible()) {
+				mange(n);
+			}
 		}
 	}
 }
