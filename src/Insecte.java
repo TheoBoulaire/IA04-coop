@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Random;
 
 import sim.engine.SimState;
 import sim.engine.Stoppable;
@@ -231,6 +232,22 @@ public class Insecte extends Agent{
 	@Override
 	public double getAggro(int identite) {
 		return idAggros.get(identite);
+	}
+	
+	protected void phaseReproduction() {
+		if(energie == c.maxEnergy) {
+			Insecte i = createChild();
+			modele.addInsecte(i);
+			energie -= (int) Math.floor(c.maxEnergy/2.0);
+		}
+	}
+	
+	protected Insecte createChild() {
+		Random r = new Random();
+		double nAggro = modele.createRandAggro(r, aggro);
+		ArrayList<Double> nAggroTab = modele.createRandAggroTab(r, idAggros);
+		Insecte ins = new Insecte(x, y, modele, identite, nAggro, nAggroTab, strength, (int) Math.floor(c.maxEnergy/2.0), 100);
+		return ins;
 	}
 
 	@Override
