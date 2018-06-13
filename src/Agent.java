@@ -35,11 +35,12 @@ public abstract class Agent implements Steppable{
 			if(nStep > 20000) {
 				modele.end();
 			}
-			phaseRencontre();
+
 			phaseNourriture();
 			phaseDeplacement();
 			phaseRencontre();
-			phaseNourriture();
+//			phaseRencontre();
+//			phaseNourriture();
 		}
 		
 		public void moveTo(int x, int y) {
@@ -170,9 +171,18 @@ public abstract class Agent implements Steppable{
 		
 		public abstract void endureAttack(Agent ag);
 		
-		public void attackAgent(Agent ag) {
+		public void attackAgent(Agent ag) {//对手的命值被自己的攻击力减去
 			ag.endureAttack(this);
-			if(!ag.isDead()) ag.attackAgent(this);
+			if(!ag.isDead()) { 
+				ag.attackAgent(this);
+			}
+			
+//			if(this instanceof  InsecteCarn && ag instanceof Insecte) {
+//				InsecteCarn ic = (InsecteCarn)this;
+//				Insecte ins = (Insecte)ag;
+//				ic.mange(ins);
+//			}
+			
 		}
 		
 		public boolean isDead() {

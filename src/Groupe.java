@@ -15,7 +15,7 @@ public class Groupe extends Agent {
 	private static final long serialVersionUID = 6107536912823754245L;
 
 	/**
-	 * Insectes rangés par aggressivité.
+	 * Insectes rangï¿½s par aggressivitï¿½.
 	 */
 	private List<Insecte> insectes;
 
@@ -28,12 +28,13 @@ public class Groupe extends Agent {
 	public void moveTo(int x, int y) {
 		super.moveTo(x, y);
 		for(Insecte i : insectes) {
-			i.moveTo(x, y);
+			i.x = x;
+			i.y = y;
 		}
 	}
 	
 	/**
-	 * Méthode visant à refaire des insectes à partir d'un groupe et à supprimer ce groupe.
+	 * Mï¿½thode visant ï¿½ refaire des insectes ï¿½ partir d'un groupe et ï¿½ supprimer ce groupe.
 	 */
 	public void endGroup() {
 		dead = true;
@@ -283,8 +284,8 @@ public class Groupe extends Agent {
 		while(str > 0 && !dead) {
 			Insecte ins = insectes.get(index);
 			double vie = ins.getVie();
-			ins.endureHit(str);
-			str -= vie;
+			ins.endureHit(ag);
+			str -= vie;//la force reste est disribue a attacker le prochain insecte 
 		}
 	}
 	/*
@@ -309,9 +310,22 @@ public class Groupe extends Agent {
 		if(n != null) {
 			ListIterator<Insecte> it = insectes.listIterator();
 			while(n.getQuantite() > 0 && it.hasNext()) {
-				it.next().mange(n);
+				Insecte ins = it.next();
+				if(ins instanceof InsecteHerb) {
+					((InsecteHerb)ins).mange(n);
+				}
 			}
 		}
+	}
+	
+	public List<InsecteCarn> getInsecteCarns() {
+		List<InsecteCarn> list = new ArrayList<>();
+		for(Insecte ins : insectes) {
+			if(ins instanceof InsecteCarn) {
+				list.add((InsecteCarn)ins);
+			}
+		}
+		return list;
 	}
 	
 	public String toString() {
