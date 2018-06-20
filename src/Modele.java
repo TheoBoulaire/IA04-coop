@@ -17,6 +17,11 @@ public class Modele extends SimState {
 	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
 	//public Stack<Double> aggroNaissances = new Stack<Double>();
+	private ArrayList<Groupe> listeGroupes = new ArrayList<Groupe>();
+	private ArrayList<Double> aggroSelfList = new ArrayList<Double>();
+	private ArrayList<Double> aggroOtherList = new ArrayList<Double>();
+	
+	
 
 	public int nInsectesVivants = c.nInsectesHerb + c.nInsectesCarn;
 
@@ -44,6 +49,65 @@ public class Modele extends SimState {
 	
 	public double getDiffAggroSelfLastNaissance() {
 		return aggroSelfLastNaissance - aggroLastNaissance;
+	}
+	
+	public int getNombreGroupes() {
+		return listeGroupes.size();
+	}
+	
+	public double getTailleMoyGroupe() {
+		double tailleMoy = 0;
+		for(Groupe grp : listeGroupes) {
+			tailleMoy += grp.getInsectes().size();
+		}
+		tailleMoy = tailleMoy / listeGroupes.size();
+		return tailleMoy;
+	}
+	
+	public int getPopGroupes() {
+		int n = 0;
+		for(Groupe grp : listeGroupes) {
+			n += grp.getInsectes().size();
+		}
+		return n;
+	}
+	
+	public int getPopHerbGroupes() {
+		int n = 0;
+		for(Insecte i : insectesVivants) {
+			if(i instanceof InsecteHerb && i.getMyGroupe() != null)
+				n++;
+		}
+		return n;
+	}
+	
+	public double getProportionHerbGroupes() {
+		return getPopHerbGroupes() / (double)getnInsectesHerb();
+	}
+	
+	public double getProportionPredateurs() {
+		return getnInsectesCarn() / (double)getnInsectesVivants();
+	}
+	
+	public double getProportionPopGroupes() {
+		return getPopGroupes() / (double)getnInsectesVivants();
+	}
+	
+	public int getNombreMixtes() {
+		int compteur = 0;
+		for(Groupe grp : listeGroupes) {
+			boolean hasCarn = false;
+			boolean hasHerb = false;
+			for(Insecte i : grp.getInsectes()) {
+				hasCarn = hasCarn || i instanceof InsecteCarn;
+				hasHerb = hasHerb || i instanceof InsecteHerb;
+				if(hasHerb && hasCarn) {
+					compteur++;
+					break;
+				}
+			}
+		}
+		return compteur;
 	}
 	
 	public double getDiffAggroOthersLastNaissance() {
@@ -194,6 +258,14 @@ public class Modele extends SimState {
 		else if(aggro < 0.05) 
 			aggro = 0.05;
 		return aggro;
+	}
+	
+	public void addGroupe(Groupe g) {
+		this.listeGroupes.add(g);
+	}
+	
+	public void removeGroupe(Groupe g) {
+		this.listeGroupes.remove(g);
 	}
 	
 	public double createRandAggro(Random r, double aggro) {

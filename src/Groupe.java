@@ -22,6 +22,7 @@ public class Groupe extends Agent {
 	public Groupe(int x, int y, Modele m) {
 		super(x, y, m);
 		insectes = new ArrayList<Insecte>();
+		m.addGroupe(this);
 	}
 	
 	@Override
@@ -46,12 +47,15 @@ public class Groupe extends Agent {
 	 * M�thode visant � refaire des insectes � partir d'un groupe et � supprimer ce groupe.
 	 */
 	public void endGroup() {
+		modele.removeGroupe(this);
 		dead = true;
-		for(Insecte ins : insectes) {
-			ins.setMyGroupe(null);
-			Stoppable stoppable = modele.schedule.scheduleRepeating(ins); 
-			ins.stoppable = stoppable;
-			modele.grille.setObjectLocation(ins, x, y);
+		if(insectes != null) {
+			for(Insecte ins : insectes) {
+				ins.setMyGroupe(null);
+				Stoppable stoppable = modele.schedule.scheduleRepeating(ins); 
+				ins.stoppable = stoppable;
+				modele.grille.setObjectLocation(ins, x, y);
+			}
 		}
 		removeFromSchedule();
 	}
@@ -184,8 +188,12 @@ public class Groupe extends Agent {
 		if(agent instanceof Groupe) {//Deux groupes joignent ensemble
 			System.out.println("Deux groupes joignent ensemble.\n");
 			Groupe grp = (Groupe) agent;
+			for(Insecte ins : grp.getInsectes()) {
+				ins.setMyGroupe(this);
+			}
 			insectes.addAll(grp.getInsectes());
-			grp.removeFromSchedule();
+			grp.insectes = null;
+			grp.endGroup();
 		} else {//Un groupe permet a un insecte de joindre a lui meme
 			System.out.println("Un groupe permet a un insecte de joindre a lui meme.\n");
 			Insecte ins = (Insecte) agent;
@@ -218,8 +226,7 @@ public class Groupe extends Agent {
 			insectes.remove(insecte);
 		}
 		if(insectes.isEmpty()) {
-			dead = true;
-			this.removeFromSchedule();
+			endGroup();
 		}
 	}
 	
