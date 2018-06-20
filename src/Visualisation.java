@@ -65,12 +65,12 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D a = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_BOWTIE, ShapePortrayal2D.Y_POINTS_BOWTIE) {
 					public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 						if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -83,12 +83,12 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D b = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_DIAMOND, ShapePortrayal2D.Y_POINTS_DIAMOND) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -100,7 +100,7 @@ public class Visualisation extends GUIState {
 			case 2 : 
 				ShapePortrayal2D c = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HEXAGON, ShapePortrayal2D.Y_POINTS_HEXAGON) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}
@@ -113,12 +113,12 @@ public class Visualisation extends GUIState {
 					ShapePortrayal2D.Y_POINTS_HEXAGON_ROTATED) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -132,12 +132,12 @@ public class Visualisation extends GUIState {
 					ShapePortrayal2D.Y_POINTS_HOURGLASS) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -150,12 +150,12 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D f = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_OCTAGON, ShapePortrayal2D.Y_POINTS_OCTAGON) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -168,12 +168,12 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D g = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_SQUARE, ShapePortrayal2D.Y_POINTS_SQUARE) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -186,12 +186,12 @@ public class Visualisation extends GUIState {
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_DOWN) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -205,12 +205,12 @@ public class Visualisation extends GUIState {
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_LEFT) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
@@ -223,12 +223,12 @@ public class Visualisation extends GUIState {
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_RIGHT) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
-						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
 						}
 						else {
-							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							int B = (int) Math.abs(1-(i.getStrength() * 255/50));
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}

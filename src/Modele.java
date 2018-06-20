@@ -10,7 +10,7 @@ public class Modele extends SimState {
 	
 	private static final long serialVersionUID = 2598273691291778150L;
 	
-	static Constants c = new Constants(20, 20, 10, 3, 400, 3, 5, 15);
+	static Constants c = new Constants(20, 20, 10, 3, 400, 3, 5, 15, 100, 50, 0.5);
 	private IdentiteModele im = null;
 	public SparseGrid2D grille = new SparseGrid2D(c.grilleL, c.grilleH);
 	//public Stack<Double> aggroMorts = new Stack<Double>();
@@ -272,7 +272,7 @@ public class Modele extends SimState {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
 			identite = (int) Math.floor(Math.random()*10);
-			strength = 27;
+			strength = c.forceHerb;
 //			aggro = (double)identite/10;
 			
 			aggroTab = createRandAggroTab(r);
@@ -293,7 +293,7 @@ public class Modele extends SimState {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
 			identite = (int) Math.floor(Math.random()*10);
-			strength = 27;
+			strength = c.forceCarn;
 //			aggro = (double)identite/10;
 			aggroTab = createRandAggroTab(r);
 			/*

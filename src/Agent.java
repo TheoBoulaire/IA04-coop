@@ -109,7 +109,7 @@ public abstract class Agent implements Steppable{
 			double aggro = getAggro((int) Math.floor(a.getIdentite()));
 			double react = Math.random();
 			if(react < aggro) ret = 'a';
-			else if(react > (aggro + (1-aggro)/2)) ret = 'j';
+			else if(react > (1 - (1-aggro)*c.groupProba)) ret = 'j';
 			return ret; 
 		}
 		
