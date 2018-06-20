@@ -64,9 +64,16 @@ public class Visualisation extends GUIState {
 			case 0 : 
 				ShapePortrayal2D a = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_BOWTIE, ShapePortrayal2D.Y_POINTS_BOWTIE) {
 					public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
+						if(i.isCarn) {
 						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
 						paint = new Color(R, 0, 0);
 						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 					}
 				});
 				p = a;
@@ -75,9 +82,16 @@ public class Visualisation extends GUIState {
 			case 1 : 
 				ShapePortrayal2D b = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_DIAMOND, ShapePortrayal2D.Y_POINTS_DIAMOND) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = b;
@@ -98,9 +112,16 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D d = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HEXAGON_ROTATED,
 					ShapePortrayal2D.Y_POINTS_HEXAGON_ROTATED) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = d;
@@ -110,9 +131,16 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D e = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HOURGLASS,
 					ShapePortrayal2D.Y_POINTS_HOURGLASS) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = e;
@@ -121,9 +149,16 @@ public class Visualisation extends GUIState {
 			case 5 :
 				ShapePortrayal2D f = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_OCTAGON, ShapePortrayal2D.Y_POINTS_OCTAGON) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.floor(Math.abs(1-(i.getStrength() * 255/27)));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = f;
@@ -132,9 +167,16 @@ public class Visualisation extends GUIState {
 			case 6 :
 				ShapePortrayal2D g = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_SQUARE, ShapePortrayal2D.Y_POINTS_SQUARE) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = g;
@@ -143,9 +185,16 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D h = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_DOWN,
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_DOWN) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = h;
@@ -155,9 +204,16 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D k = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_LEFT,
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_LEFT) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = k;
@@ -166,9 +222,16 @@ public class Visualisation extends GUIState {
 				ShapePortrayal2D l = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_RIGHT,
 					ShapePortrayal2D.Y_POINTS_TRIANGLE_RIGHT) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
-					paint = new Color(R, 0, 0);
-					super.draw(object, graphics, info);
+					if(i.isCarn) {
+						int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+						paint = new Color(R, 0, 0);
+						super.draw(object, graphics, info);
+						}
+						else {
+							int B = (int) Math.abs(1-(i.getStrength() * 255/27));
+							paint = new Color(0, 0, B);
+							super.draw(object, graphics, info);
+						}
 				}
 				});
 				p = l;
@@ -179,108 +242,76 @@ public class Visualisation extends GUIState {
 
 	private LabelledPortrayal2D getGroupePortrayal() {
 		SimplePortrayal2D[] portrayals = new SimplePortrayal2D[11];
+		Color C = new Color(108, 2, 119);
 		portrayals[0] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_BOWTIE, ShapePortrayal2D.Y_POINTS_BOWTIE) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[1] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_DIAMOND, ShapePortrayal2D.Y_POINTS_DIAMOND) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[2] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HEXAGON, ShapePortrayal2D.Y_POINTS_HEXAGON) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[3] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HEXAGON_ROTATED,
 				ShapePortrayal2D.Y_POINTS_HEXAGON_ROTATED) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[4] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HOURGLASS,
 				ShapePortrayal2D.Y_POINTS_HOURGLASS) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[5] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_OCTAGON, ShapePortrayal2D.Y_POINTS_OCTAGON) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[6] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_SQUARE, ShapePortrayal2D.Y_POINTS_SQUARE) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[7] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_DOWN,
 				ShapePortrayal2D.Y_POINTS_TRIANGLE_DOWN) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-				int R = (int) Math.abs(groupe.getAggro() * 255);
-				int V = (int) Math.abs(groupe.getAggro() * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[8] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_LEFT,
 				ShapePortrayal2D.Y_POINTS_TRIANGLE_LEFT) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-//				int R = (int) Math.abs(groupe.aggro * 255);
-//				int V = (int) Math.abs(groupe.aggro * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[9] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_RIGHT,
 				ShapePortrayal2D.Y_POINTS_TRIANGLE_RIGHT) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-//				int R = (int) Math.abs(groupe.aggro * 255);
-//				int V = (int) Math.abs(groupe.aggro * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
 		portrayals[10] = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_TRIANGLE_UP,
 				ShapePortrayal2D.Y_POINTS_TRIANGLE_UP) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-//				int R = (int) Math.abs(groupe.aggro * 255);
-//				int V = (int) Math.abs(groupe.aggro * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		});
@@ -292,64 +323,13 @@ public class Visualisation extends GUIState {
 		};
 		LabelledPortrayal2D r = new LabelledPortrayal2D(fPortayal, null) {
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-				Groupe groupe = (Groupe) object;
-//				int R = (int) Math.abs(groupe.aggro * 255);
-//				int V = (int) Math.abs(groupe.aggro * 255);
-				paint = new Color(0, 0, 255);
+				paint = C;
 				super.draw(object, graphics, info);
 			}
 		};
 		return r;
 	}
 	
-	
-
-//	private RectanglePortrayal2D getNourriturePortrayal() {
-//		RectanglePortrayal2D r = new RectanglePortrayal2D() {
-//			public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-//				Nourriture nou = (Nourriture) object;
-//				Color c;
-//				switch(nou.quantite) {
-//				case 0 :
-//					c = new Color (255,255,255);
-//					break;
-//				case 1 :
-//					c = new Color ( 234, 250, 241 );
-//					break;
-//				case 2 :
-//					c = new Color ( 213, 245, 227 );
-//					break;
-//				case 3 :
-//					c = new Color ( 171, 235, 198 );
-//					break;
-//				case 4 :
-//					c = new Color ( 130, 224, 170 );
-//					break;
-//				case 5 :
-//					c = new Color ( 88, 214, 141 );
-//					break;
-//				case 6 :
-//					c = new Color ( 46, 204, 113 );
-//					break;
-//				case 7 :
-//					c = new Color ( 40, 180, 99 );
-//					break;
-//				case 8 :
-//					c = new Color ( 35, 155, 86 );
-//					break;
-//				case 9 :
-//					c = new Color ( 29, 131, 72 );
-//					break;
-//				default:
-//					c = new Color ( 24, 106, 59 );
-//					break;					
-//				}
-//				paint = c;
-//				super.draw(object, graphics, info);
-//			}
-//		};
-//		return r;
-//	}
 	
 	private FacetedPortrayal2D getNourriturePortrayal() {
 	SimplePortrayal2D[] portrayals = new SimplePortrayal2D[11];
