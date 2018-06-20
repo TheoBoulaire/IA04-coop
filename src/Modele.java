@@ -13,16 +13,16 @@ public class Modele extends SimState {
 	static Constants c = new Constants(20, 20, 10, 3, 400, 3, 5, 15);
 	private IdentiteModele im = null;
 	public SparseGrid2D grille = new SparseGrid2D(c.grilleL, c.grilleH);
-	public Stack<Double> aggroMorts = new Stack<Double>();
-	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
+	//public Stack<Double> aggroMorts = new Stack<Double>();
+	//public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
-	public Stack<Double> aggroNaissances = new Stack<Double>();
+	//public Stack<Double> aggroNaissances = new Stack<Double>();
 
-	public int nInsectesVivants;
+	public int nInsectesVivants = c.nInsectesHerb + c.nInsectesCarn;
 
-	public int nInsectesCarn;
+	public int nInsectesCarn = c.nInsectesCarn;
 
-	public int nInsectesHerb;
+	public int nInsectesHerb = c.nInsectesHerb;
 
 	public double aggroLastNaissance;
 
@@ -40,7 +40,15 @@ public class Modele extends SimState {
 
 	public double aggroOthersLastNaissanceCarn;
 
-	private double aggroOthersLastNaissanceHerb; 
+	private double aggroOthersLastNaissanceHerb;
+	
+	public double getDiffAggroSelfLastNaissance() {
+		return aggroSelfLastNaissance - aggroLastNaissance;
+	}
+	
+	public double getDiffAggroOthersLastNaissance() {
+		return aggroOthersLastNaissance - aggroLastNaissance;
+	}
 
 	public int getnInsectesCarn() {
 		return nInsectesCarn;
@@ -142,6 +150,9 @@ public class Modele extends SimState {
 		super(seed);
 		Agent.c = c;
 		Visualisation.constants = c;
+		nInsectesVivants = c.nInsectesHerb + c.nInsectesCarn;
+		nInsectesCarn = c.nInsectesCarn;
+		nInsectesHerb = c.nInsectesHerb;
 	}
 	
 	public Modele(long seed, Constants c) {
@@ -149,6 +160,9 @@ public class Modele extends SimState {
 		this.c= c;
 		Agent.c = c;
 		Visualisation.constants = c;
+		nInsectesVivants = c.nInsectesHerb + c.nInsectesCarn;
+		nInsectesCarn = c.nInsectesCarn;
+		nInsectesHerb = c.nInsectesHerb;
 	}
 	
 	public Modele(long seed, IdentiteModele im) {
@@ -156,6 +170,9 @@ public class Modele extends SimState {
 		this.im = im;
 		Insecte.c = c;
 		Visualisation.constants = c;
+		nInsectesVivants = c.nInsectesHerb + c.nInsectesCarn;
+		nInsectesCarn = c.nInsectesCarn;
+		nInsectesHerb = c.nInsectesHerb;
 	}
 	
 	public double createRandAggro(Random r) {
@@ -252,7 +269,6 @@ public class Modele extends SimState {
 			strength = 27;
 //			aggro = (double)identite/10;
 			
-			aggro = createRandAggro(r);
 			aggroTab = createRandAggroTab(r);
 			/*
 			System.out.println("identite = " + identite);
@@ -260,7 +276,7 @@ public class Modele extends SimState {
 			System.out.println("strength = " + strength + "\n");
 			*/
 			
-			InsecteHerb ins = new InsecteHerb(x, y, this, identite, aggro, aggroTab, strength, c.maxEnergy, 100);
+			InsecteHerb ins = new InsecteHerb(x, y, this, identite, aggroTab, strength, c.maxEnergy, 100);
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
@@ -273,8 +289,6 @@ public class Modele extends SimState {
 			identite = (int) Math.floor(Math.random()*10);
 			strength = 27;
 //			aggro = (double)identite/10;
-			
-			aggro = createRandAggro(r);
 			aggroTab = createRandAggroTab(r);
 			/*
 			System.out.println("identite = " + identite);
@@ -282,7 +296,7 @@ public class Modele extends SimState {
 			System.out.println("strength = " + strength + "\n");
 			*/
 			
-			InsecteCarn ins = new InsecteCarn(x, y, this, identite, aggro, aggroTab, strength, c.maxEnergy, 100);
+			InsecteCarn ins = new InsecteCarn(x, y, this, identite, aggroTab, strength, c.maxEnergy, 100);
 			Stoppable stoppable = schedule.scheduleRepeating(ins); 
 			ins.stoppable = stoppable;
 			grille.setObjectLocation(ins, x, y);
@@ -317,7 +331,7 @@ public class Modele extends SimState {
 		else
 			aggroOthersLastNaissanceHerb = ins.getAggroToOtherId();
 		this.insectesVivants.add(ins);
-		aggroNaissances.push(ins.getAggro());
+		//aggroNaissances.push(ins.getAggro());
 	}
 	
 	
@@ -338,8 +352,8 @@ public class Modele extends SimState {
 	@Override
 	public void finish() {
 		super.finish();
-		System.out.println(this.aggroMorts);
-		this.aggroMorts.clear();
+		//System.out.println(this.aggroMorts);
+		//this.aggroMorts.clear();
 	}
 	
 	/*
@@ -359,16 +373,29 @@ public class Modele extends SimState {
 	
 	public void hearIsDead(Insecte ins) {
 //		System.out.println("Un mort.");
-		this.insectesVivants.remove(ins);
-		this.pileMorts.add(ins);
-		if(insectesVivants.size() == 1) {
-			System.out.println("Tentative fin.");
-//			insectesVivants.get(0).die(this);
-			Insecte lastInsecte = insectesVivants.get(0);
-			lastInsecte.die();
-			System.out.println("Fin.");
+		boolean res = this.insectesVivants.remove(ins);
+		if(res) {
+			nInsectesVivants--;
+			if(ins instanceof InsecteCarn)
+				nInsectesCarn--;
+			else
+				nInsectesHerb--;
+			//this.pileMorts.add(ins);
+			if(insectesVivants.size() == 1) {
+				System.out.println("Tentative fin.");
+	//			insectesVivants.get(0).die(this);
+				Insecte lastInsecte = insectesVivants.get(0);
+				nInsectesVivants--;
+				if(lastInsecte instanceof InsecteCarn)
+					nInsectesCarn--;
+				else
+					nInsectesHerb--;
+				lastInsecte.die();
+				System.out.println("Fin.");
+				this.end();
+			}
+	//		System.out.println("Est mort.");
 		}
-//		System.out.println("Est mort.");
 	}
 	
 	public void end() {
@@ -391,6 +418,7 @@ public class Modele extends SimState {
 		this.im = im;
 	}
 
+	/*
 	public ArrayList<Insecte> getPileMorts() {
 		return pileMorts;
 	}
@@ -398,6 +426,7 @@ public class Modele extends SimState {
 	public void setPileMorts(ArrayList<Insecte> pileMorts) {
 		this.pileMorts = pileMorts;
 	}
+	*/
 
 	public static Constants getC() {
 		return c;

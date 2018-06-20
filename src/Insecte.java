@@ -11,13 +11,12 @@ import sim.util.Bag;
 public abstract class Insecte extends Agent {
 	
 	public int identite;
-	public double aggro;
 	public double strength;
 	public double energie;
 	public double vie;
 	private static final long serialVersionUID = 31265800453373745L;
 	public Groupe myGroupe = null;
-	private ArrayList<Double> idAggros;
+	protected ArrayList<Double> idAggros;
 	
 	public double getAggroToOtherId() {
 		double ret = 0;
@@ -33,10 +32,9 @@ public abstract class Insecte extends Agent {
 		return idAggros.get(identite);
 	}
 	
-	public Insecte(int x, int y, Modele m, int identite, double aggro, ArrayList<Double> idAggros, double strength, double energie, double vie) {
+	public Insecte(int x, int y, Modele m, int identite, ArrayList<Double> idAggros, double strength, double energie, double vie) {
 		super(x, y, m);
 		this.identite = identite;
-		this.aggro = aggro;
 		this.strength = strength;
 		this.vie = vie;
 		this.energie = energie;
@@ -74,6 +72,11 @@ public abstract class Insecte extends Agent {
 	
 	@Override
 	public double getAggro() {
+		double aggro = 0;
+		for(int i = 0; i < 10; i++) {
+			aggro += idAggros.get(i);
+		}
+		aggro = aggro / 9.0;
 		return aggro;
 	}
 	@Override
@@ -171,13 +174,7 @@ public abstract class Insecte extends Agent {
 		
 	}
 	
-	protected Insecte createChild() {
-		Random r = new Random();
-		double nAggro = modele.createRandAggro(r, aggro);
-		ArrayList<Double> nAggroTab = modele.createRandAggroTab(r, idAggros);
-		InsecteHerb ins = new InsecteHerb(x, y, modele, identite, nAggro, nAggroTab, strength, (int) Math.floor(c.maxEnergy/2.0), 100);
-		return ins;
-	}
+	protected abstract Insecte createChild();
 	
 	/*
 	@Override
