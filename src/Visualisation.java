@@ -57,7 +57,7 @@ public class Visualisation extends GUIState {
 	}
 
 	
-	private SimplePortrayal2D getInsectPortrayal(Insecte i) {
+	public SimplePortrayal2D getInsectPortrayal(Insecte i) {
 		SimplePortrayal2D p = null;
 		int n = (int) i.getIdentite();
 		switch(n) {

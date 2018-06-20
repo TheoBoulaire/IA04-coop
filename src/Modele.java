@@ -41,6 +41,8 @@ public class Modele extends SimState {
 	public double aggroOthersLastNaissanceCarn;
 
 	private double aggroOthersLastNaissanceHerb; 
+	
+	private Visualisation gui;
 
 	public int getnInsectesCarn() {
 		return nInsectesCarn;
@@ -136,6 +138,10 @@ public class Modele extends SimState {
 
 	public void setAggroOthersLastNaissanceHerb(double aggroOthersLastNaissanceHerb) {
 		this.aggroOthersLastNaissanceHerb = aggroOthersLastNaissanceHerb;
+	}
+	
+	public void setVisualisation(Visualisation g) {
+		this.gui = g;
 	}
 
 	public Modele(long seed) {
@@ -296,6 +302,7 @@ public class Modele extends SimState {
 		Stoppable stoppable = schedule.scheduleRepeating(ins); 
 		ins.stoppable = stoppable;
 		grille.setObjectLocation(ins, ins.x, ins.y);
+		gui.grillePortrayal.setPortrayalForObject(ins, gui.getInsectPortrayal(ins));
 		nInsectesVivants++;
 		if(ins instanceof InsecteCarn)
 			nInsectesCarn++;
