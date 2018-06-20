@@ -10,26 +10,10 @@ public class InsecteCarn extends Insecte{
 	}
 
 	public void mange(Insecte ins) {
-		while(energie < c.maxEnergy && ins.getEnergie() > 0) {
-			energie += ins.getEnergie();
-			if(energie > c.maxEnergy) energie = c.maxEnergy;
-			
-		}
+		energie += ins.getEnergie() / 2;
+		if(energie > c.maxEnergy) energie = c.maxEnergy;
 	}
 	
-	public void phaseNourriture() {}
-
 	@Override
-	public void endureHit(Agent ag) {
-		double str = ag.getStrength();
-		this.vie -= str;
-		if(vie < 0) {
-			if(ag instanceof InsecteCarn) {
-				((InsecteCarn)ag).mange(this);
-			}
-			this.die();
-		}
-	}
-	
-	
+	public void phaseNourriture() {}
 }

@@ -121,7 +121,7 @@ public class Visualisation extends GUIState {
 			case 5 :
 				ShapePortrayal2D f = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_OCTAGON, ShapePortrayal2D.Y_POINTS_OCTAGON) {
 				public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
-					int R = (int) Math.abs(1-(i.getStrength() * 255/27));
+					int R = (int) Math.floor(Math.abs(1-(i.getStrength() * 255/27)));
 					paint = new Color(R, 0, 0);
 					super.draw(object, graphics, info);
 				}

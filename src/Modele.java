@@ -10,7 +10,7 @@ public class Modele extends SimState {
 	
 	private static final long serialVersionUID = 2598273691291778150L;
 	
-	static Constants c = new Constants(20, 20, 10, 400, 50, 3, 5, 15);
+	static Constants c = new Constants(20, 20, 10, 3, 400, 3, 5, 15);
 	private IdentiteModele im = null;
 	public SparseGrid2D grille = new SparseGrid2D(c.grilleL, c.grilleH);
 	public Stack<Double> aggroMorts = new Stack<Double>();
@@ -18,8 +18,135 @@ public class Modele extends SimState {
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
 	public Stack<Double> aggroNaissances = new Stack<Double>();
 
+	public int nInsectesVivants;
+
+	public int nInsectesCarn;
+
+	public int nInsectesHerb;
+
+	public double aggroLastNaissance;
+
+	public double aggroLastNaissanceCarn;
+
+	public double aggroLastNaissanceHerb;
+
+	public double aggroSelfLastNaissance;
+
+	public double aggroSelfLastNaissanceCarn;
+
+	public double aggroSelfLastNaissanceHerb;
+
+	public double aggroOthersLastNaissance;
+
+	public double aggroOthersLastNaissanceCarn;
+
+	private double aggroOthersLastNaissanceHerb; 
+
+	public int getnInsectesCarn() {
+		return nInsectesCarn;
+	}
+
+	public void setnInsectesCarn(int nInsectesCarn) {
+		this.nInsectesCarn = nInsectesCarn;
+	}
+
+	public int getnInsectesHerb() {
+		return nInsectesHerb;
+	}
+
+	public void setnInsectesHerb(int nInsectesHerb) {
+		this.nInsectesHerb = nInsectesHerb;
+	}
+
+	public double getAggroLastNaissance() {
+		return aggroLastNaissance;
+	}
+
+	public int getnInsectesVivants() {
+		return nInsectesVivants;
+	}
+
+	public void setnInsectesVivants(int nInsectesVivants) {
+		this.nInsectesVivants = nInsectesVivants;
+	}
+
+	public void setAggroLastNaissance(double aggroLastNaissance) {
+		this.aggroLastNaissance = aggroLastNaissance;
+	}
+
+	public double getAggroLastNaissanceCarn() {
+		return aggroLastNaissanceCarn;
+	}
+
+	public void setAggroLastNaissanceCarn(double aggroLastNaissanceCarn) {
+		this.aggroLastNaissanceCarn = aggroLastNaissanceCarn;
+	}
+
+	public double getAggroLastNaissanceHerb() {
+		return aggroLastNaissanceHerb;
+	}
+
+	public void setAggroLastNaissanceHerb(double aggroLastNaissanceHerb) {
+		this.aggroLastNaissanceHerb = aggroLastNaissanceHerb;
+	}
+
+	public double getAggroSelfLastNaissance() {
+		return aggroSelfLastNaissance;
+	}
+
+	public void setAggroSelfLastNaissance(double aggroSelfLastNaissance) {
+		this.aggroSelfLastNaissance = aggroSelfLastNaissance;
+	}
+
+	public double getAggroSelfLastNaissanceCarn() {
+		return aggroSelfLastNaissanceCarn;
+	}
+
+	public void setAggroSelfLastNaissanceCarn(double aggroSelfLastNaissanceCarn) {
+		this.aggroSelfLastNaissanceCarn = aggroSelfLastNaissanceCarn;
+	}
+
+	public double getAggroSelfLastNaissanceHerb() {
+		return aggroSelfLastNaissanceHerb;
+	}
+
+	public void setAggroSelfLastNaissanceHerb(double aggroSelfLastNaissanceHerb) {
+		this.aggroSelfLastNaissanceHerb = aggroSelfLastNaissanceHerb;
+	}
+
+	public double getAggroOthersLastNaissance() {
+		return aggroOthersLastNaissance;
+	}
+
+	public void setAggroOthersLastNaissance(double aggroOthersLastNaissance) {
+		this.aggroOthersLastNaissance = aggroOthersLastNaissance;
+	}
+
+	public double getAggroOthersLastNaissanceCarn() {
+		return aggroOthersLastNaissanceCarn;
+	}
+
+	public void setAggroOthersLastNaissanceCarn(double aggroOthersLastNaissanceCarn) {
+		this.aggroOthersLastNaissanceCarn = aggroOthersLastNaissanceCarn;
+	}
+
+	public double getAggroOthersLastNaissanceHerb() {
+		return aggroOthersLastNaissanceHerb;
+	}
+
+	public void setAggroOthersLastNaissanceHerb(double aggroOthersLastNaissanceHerb) {
+		this.aggroOthersLastNaissanceHerb = aggroOthersLastNaissanceHerb;
+	}
+
 	public Modele(long seed) {
 		super(seed);
+		Agent.c = c;
+		Visualisation.constants = c;
+	}
+	
+	public Modele(long seed, Constants c) {
+		super(seed);
+		this.c= c;
 		Agent.c = c;
 		Visualisation.constants = c;
 	}
@@ -118,11 +245,11 @@ public class Modele extends SimState {
 		double strength;
 		ArrayList<Double> aggroTab;
 		Random r = new Random();
-		for(int i = 0; i < c.nInsectes - 2; i++) {
+		for(int i = 0; i < c.nInsectesHerb; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
 			identite = (int) Math.floor(Math.random()*10);
-			strength = identite*3;
+			strength = 27;
 //			aggro = (double)identite/10;
 			
 			aggro = createRandAggro(r);
@@ -140,11 +267,11 @@ public class Modele extends SimState {
 			this.insectesVivants.add(ins);
 		}
 		
-		for(int i = 0; i < 2; i++) {
+		for(int i = 0; i < c.nInsectesCarn; i++) {
 			x = (int) Math.floor(Math.random()*c.grilleL);
 			y = (int) Math.floor(Math.random()*c.grilleH);
 			identite = (int) Math.floor(Math.random()*10);
-			strength = identite*3;
+			strength = 27;
 //			aggro = (double)identite/10;
 			
 			aggro = createRandAggro(r);
@@ -169,10 +296,36 @@ public class Modele extends SimState {
 		Stoppable stoppable = schedule.scheduleRepeating(ins); 
 		ins.stoppable = stoppable;
 		grille.setObjectLocation(ins, ins.x, ins.y);
+		nInsectesVivants++;
+		if(ins instanceof InsecteCarn)
+			nInsectesCarn++;
+		else
+			nInsectesHerb++;
+		aggroLastNaissance = ins.getAggro();
+		if(ins instanceof InsecteCarn)
+			aggroLastNaissanceCarn = ins.getAggro();
+		else
+			aggroLastNaissanceHerb = ins.getAggro();
+		aggroSelfLastNaissance = ins.getAggroToSelf();
+		if(ins instanceof InsecteCarn)
+			aggroSelfLastNaissanceCarn = ins.getAggroToSelf();
+		else
+			aggroSelfLastNaissanceHerb = ins.getAggroToSelf();
+		aggroOthersLastNaissance = ins.getAggroToOtherId();
+		if(ins instanceof InsecteCarn)
+			aggroOthersLastNaissanceCarn = ins.getAggroToOtherId();
+		else
+			aggroOthersLastNaissanceHerb = ins.getAggroToOtherId();
 		this.insectesVivants.add(ins);
 		aggroNaissances.push(ins.getAggro());
 	}
 	
+	
+	
+	public void setInsectesVivants(ArrayList<Insecte> insectesVivants) {
+		this.insectesVivants = insectesVivants;
+	}
+
 	public void ajouterNourriture() {
 		int x, y;
 		x = (int) Math.floor(Math.random()*c.grilleL);
@@ -221,8 +374,12 @@ public class Modele extends SimState {
 	public void end() {
 		ArrayList<Insecte> aTuer = (ArrayList<Insecte>) insectesVivants.clone();
 		for(Insecte i : aTuer) {
-//			i.die(this);
 			i.die();
+		}
+		for(int y = 0; y < c.grilleH; y++) {
+			for(int x = 0; x < c.grilleL; x++) {
+				
+			}
 		}
 	}
 
@@ -260,5 +417,7 @@ public class Modele extends SimState {
 	public ArrayList<Insecte> getInsectesVivants(){
 		return this.insectesVivants;
 	}
+	
+
 	
 }

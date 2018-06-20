@@ -18,45 +18,11 @@ public class InsecteHerb extends Insecte{
 		}
 	}
 	
-	
+	@Override
 	public void phaseNourriture() {
 		Nourriture n = foodHere();
 		if(n != null) {
 			mange(n);
 		}
 	}
-
-	@Override
-	public void endureHit(Agent ag) {
-		double str = ag.getStrength();
-		this.vie -= str;
-		if(vie < 0){
-			endureEat(ag);
-			this.die();
-		}
-	}
-	
-	private void endureEat(Agent ag) {
-		int i = 0;
-		if(ag instanceof Groupe) {
-			Groupe groupe = (Groupe)ag;
-			List<InsecteCarn> listCarns = groupe.getInsecteCarns();
-			if(listCarns.size() > 1) {//insecteHerb est mangee par un groupe
-				int rest = energie;
-				while(rest > 0 && i < listCarns.size() && listCarns.get(i).energie + rest >= c.maxEnergy) {
-					rest = rest - (c.maxEnergy - listCarns.get(i).energie);
-					listCarns.get(i).mange(this);
-					i++;
-				}
-			}else if(listCarns.size() == 1) {
-				listCarns.get(0).mange(this);
-			}
-		}else {
-			if(ag instanceof InsecteCarn) {
-				((InsecteCarn)ag).mange(this);
-			}
-		}
-		
-	}
-
 }

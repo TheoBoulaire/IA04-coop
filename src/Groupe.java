@@ -15,13 +15,22 @@ public class Groupe extends Agent {
 	private static final long serialVersionUID = 6107536912823754245L;
 
 	/**
-	 * Insectes rangï¿½s par aggressivitï¿½.
+	 * Insectes rangés par aggressivité.
 	 */
-	private List<Insecte> insectes;
+	private ArrayList<Insecte> insectes;
 
 	public Groupe(int x, int y, Modele m) {
 		super(x, y, m);
-		insectes = new ArrayList<>();
+		insectes = new ArrayList<Insecte>();
+	}
+	
+	@Override
+	public void deplacer() {
+		super.deplacer();
+		ArrayList<Insecte> copieIns = (ArrayList<Insecte>) insectes.clone();
+		for(Insecte i : copieIns) {
+			i.consommerEnergie();
+		}
 	}
 
 	@Override
@@ -214,35 +223,6 @@ public class Groupe extends Agent {
 		}
 	}
 	
-	/*
-	private void updateAggro() {
-		double sum = 0;
-		for(Insecte insecte : insectes) {
-			sum += insecte.aggro;
-		}
-		this.aggro = sum/insectes.size(); 
-	}
-	*/
-	
-	/*
-	private boolean mangersource(Modele m){
-		for(int i = x-1; i<x+2; i++){
-			for(int j = y-1; j<y+2; j++){
-				if(m.grille.getObjectsAtLocation(i, j)!=null && m.grille.getObjectsAtLocation(i, j).get(0).getClass() == Nourriture.class){
-					Nourriture nourriture = (Nourriture) m.grille.getObjectsAtLocation(i, j).get(0);
-					
-					if(mange()) {
-						nourriture.croc(m);
-						return true;
-					}else {
-						return false;
-					}
-				}
-			}
-		}
-		return false;
-	}*/
-	
 	public List<Insecte> getInsectes() {
 		return insectes;
 	}
@@ -281,11 +261,13 @@ public class Groupe extends Agent {
 	public void endureAttack(Agent ag) {
 		double str = ag.getStrength();
 		int index = 0;
-		while(str > 0 && !dead) {
-			Insecte ins = insectes.get(index);
+		ArrayList<Insecte> insCopy = (ArrayList<Insecte>) insectes.clone();
+		while(str > 0 && !dead && index < insCopy.size()) {
+			Insecte ins = insCopy.get(index);
 			double vie = ins.getVie();
 			ins.endureHit(ag);
 			str -= vie;//la force reste est disribue a attacker le prochain insecte 
+			index++;
 		}
 	}
 	/*
@@ -330,5 +312,17 @@ public class Groupe extends Agent {
 	
 	public String toString() {
 		return String.valueOf(insectes.size());		
+	}
+
+	@Override
+	protected void phaseReproduction() {
+		for(Insecte i : insectes) {
+			i.phaseReproduction();
+		}
+	}
+	@Override
+	protected void phaseFin() {
+		if(insectes.size() == 1)
+			endGroup();
 	}
 }

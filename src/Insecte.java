@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
@@ -7,18 +8,32 @@ import sim.engine.SimState;
 import sim.engine.Stoppable;
 import sim.util.Bag;
 
-public abstract class Insecte extends Agent{
+public abstract class Insecte extends Agent {
 	
 	public int identite;
 	public double aggro;
 	public double strength;
-	public int energie;
+	public double energie;
 	public double vie;
 	private static final long serialVersionUID = 31265800453373745L;
 	public Groupe myGroupe = null;
 	private ArrayList<Double> idAggros;
 	
-	public Insecte(int x, int y, Modele m, int identite, double aggro, ArrayList<Double> idAggros, double strength, int energie, double vie) {
+	public double getAggroToOtherId() {
+		double ret = 0;
+		for(int i = 0; i < idAggros.size(); i++) {
+			if(i != identite) {
+				ret += idAggros.get(i);
+			}
+		}
+		return ret/(idAggros.size()-1);
+	}
+	
+	public double getAggroToSelf() {
+		return idAggros.get(identite);
+	}
+	
+	public Insecte(int x, int y, Modele m, int identite, double aggro, ArrayList<Double> idAggros, double strength, double energie, double vie) {
 		super(x, y, m);
 		this.identite = identite;
 		this.aggro = aggro;
@@ -31,10 +46,137 @@ public abstract class Insecte extends Agent{
 	@Override
 	public void deplacer() {
 		super.deplacer();
+		consommerEnergie();
+	}
+	
+	public void consommerEnergie() {
 		energie--;
 		if(energie < 1) {
 			this.die();
+			System.out.println("Epuisé.");
 		}
+	}
+	
+	public void die() {
+		this.dead = true;
+		removeFromSchedule();
+		if(myGroupe != null) myGroupe.removeFromGroupe(this);
+		modele.hearIsDead(this);
+	}
+
+	public Groupe getMyGroupe() {
+		return myGroupe;
+	}
+
+	public void setMyGroupe(Groupe myGroupe) {
+		this.myGroupe = myGroupe;
+	}
+	
+	@Override
+	public double getAggro() {
+		return aggro;
+	}
+	@Override
+	public double getStrength() {
+		return strength;
+	}
+	@Override
+	public double getIdentite() {
+		return (double) identite;
+	}
+	
+	public double getVie() {
+		return vie;
+	}
+	
+	public double getEnergie() {
+		return energie;
+	}
+	
+	@Override
+	public void endureAttack(Agent ag) {
+		endureHit(ag);
+	}
+	
+	
+	public void endureHit(Agent ag) {
+		double str = ag.getStrength();
+		this.vie -= str;
+		if(vie <= 0){
+			endureEat(ag);
+			this.die();
+			System.out.println("Tué !");
+		}
+	}
+	
+	private void endureEat(Agent ag) {
+		int i = 0;
+		if(ag instanceof Groupe) {
+			Groupe groupe = (Groupe)ag;
+			List<InsecteCarn> listCarns = groupe.getInsecteCarns();
+			if(listCarns.size() > 1) {//insecteHerb est mangee par un groupe
+				double rest = energie;
+				while(rest > 0 && i < listCarns.size() && listCarns.get(i).energie + rest >= c.maxEnergy) {
+					rest = rest - (c.maxEnergy - listCarns.get(i).energie);
+					listCarns.get(i).mange(this);
+					i++;
+				}
+				System.out.println("Insecte mangé.");
+			}else if(listCarns.size() == 1) {
+				listCarns.get(0).mange(this);
+				System.out.println("Insecte mangé.");
+			}
+		} else if(ag instanceof InsecteCarn) {
+			((InsecteCarn)ag).mange(this);
+			System.out.println("Insecte mangé.");
+		}
+	}
+
+	@Override
+	public void join(Agent a) {
+		if(a instanceof Groupe) {
+			removeFromSchedule();
+			Groupe g = (Groupe) a;
+			myGroupe = g;
+			g.addInsecte(this);
+		} else if(a instanceof Insecte) {
+			Groupe g = new Groupe(x, y, modele);
+			Insecte i = (Insecte) a;
+			removeFromSchedule(); 
+			g.addInsecte(this);
+			i.removeFromSchedule();
+			g.addInsecte(i);
+			Stoppable stoppable = modele.schedule.scheduleRepeating(g); 
+			g.stoppable = stoppable;
+			modele.grille.setObjectLocation(g, x, y);
+		}
+	}
+
+	@Override
+	public double getAggro(int identite) {
+		return idAggros.get(identite);
+	}
+	
+	@Override
+	protected void phaseReproduction() {
+		if(energie == c.maxEnergy) {
+			Insecte i = createChild();
+			modele.addInsecte(i);
+			energie -= (int) Math.floor(c.maxEnergy/2.0);
+		}
+	}
+	
+	@Override
+	protected void phaseFin() {
+		
+	}
+	
+	protected Insecte createChild() {
+		Random r = new Random();
+		double nAggro = modele.createRandAggro(r, aggro);
+		ArrayList<Double> nAggroTab = modele.createRandAggroTab(r, idAggros);
+		InsecteHerb ins = new InsecteHerb(x, y, modele, identite, nAggro, nAggroTab, strength, (int) Math.floor(c.maxEnergy/2.0), 100);
+		return ins;
 	}
 	
 	/*
@@ -149,110 +291,4 @@ public abstract class Insecte extends Agent{
 //			n.croc(modele);
 //		}
 //	}
-	
-	public void die() {
-		this.dead = true;
-		removeFromSchedule();
-		if(myGroupe != null) myGroupe.removeFromGroupe(this);
-		modele.hearIsDead(this);
-		System.out.println("Vie : " + vie + ", energie : " + energie);
-	}
-
-	public Groupe getMyGroupe() {
-		return myGroupe;
-	}
-
-	public void setMyGroupe(Groupe myGroupe) {
-		this.myGroupe = myGroupe;
-	}
-
-	public void consommerEnergie() {
-		energie--;
-	}
-	
-	@Override
-	public double getAggro() {
-		return aggro;
-	}
-	@Override
-	public double getStrength() {
-		return strength;
-	}
-	@Override
-	public double getIdentite() {
-		return (double) identite;
-	}
-	
-	public double getVie() {
-		return vie;
-	}
-	
-	public int getEnergie() {
-		return energie;
-	}
-	
-	@Override
-	public void endureAttack(Agent ag) {
-		endureHit(ag);
-	}
-	
-	
-	public abstract void endureHit(Agent ag);
-	
-//	public void die(Modele m) {
-//		stoppable.stop();
-//		m.hearIsDead(this);
-//	}
-
-	@Override
-	public void join(Agent a) {
-		if(a instanceof Groupe) {
-			removeFromSchedule();
-			Groupe g = (Groupe) a;
-			myGroupe = g;
-			g.addInsecte(this);
-		} else if(a instanceof Insecte) {
-			Groupe g = new Groupe(x, y, modele);
-			Insecte i = (Insecte) a;
-			removeFromSchedule(); 
-			g.addInsecte(this);
-			i.removeFromSchedule();
-			g.addInsecte(i);
-			Stoppable stoppable = modele.schedule.scheduleRepeating(g); 
-			g.stoppable = stoppable;
-			modele.grille.setObjectLocation(g, x, y);
-		}
-	}
-
-	/*
-	@Override
-	protected void phaseDeplacement() {
-		// TODO Auto-generated method stub
-		
-	}*/
-
-	@Override
-	public double getAggro(int identite) {
-		return idAggros.get(identite);
-	}
-	
-	protected void phaseReproduction() {
-		if(energie == c.maxEnergy) {
-			Insecte i = createChild();
-			modele.addInsecte(i);
-			energie -= (int) Math.floor(c.maxEnergy/2.0);
-		}
-	}
-	
-	protected Insecte createChild() {
-		Random r = new Random();
-		double nAggro = modele.createRandAggro(r, aggro);
-		ArrayList<Double> nAggroTab = modele.createRandAggroTab(r, idAggros);
-		InsecteHerb ins = new InsecteHerb(x, y, modele, identite, nAggro, nAggroTab, strength, (int) Math.floor(c.maxEnergy/2.0), 100);
-		return ins;
-	}
-
-	@Override
-	protected void phaseNourriture() {}
-
 }

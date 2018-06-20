@@ -12,12 +12,6 @@ public abstract class Agent implements Steppable{
 		public Modele modele;
 	
 		public static Constants c;
-		/*
-		public double strength = 0;
-		public double aggro = 0;
-		public int identite = 0;
-<<<<<<< HEAD
-		*/
 		public int x, y;
 		public boolean dead = false;
 		public Stoppable stoppable;
@@ -37,10 +31,11 @@ public abstract class Agent implements Steppable{
 			}
 
 			phaseNourriture();
+			phaseReproduction();
 			phaseDeplacement();
-			phaseRencontre();
-//			phaseRencontre();
-//			phaseNourriture();
+			if(!dead)
+				phaseRencontre();
+			phaseFin();
 		}
 		
 		public void moveTo(int x, int y) {
@@ -109,9 +104,17 @@ public abstract class Agent implements Steppable{
 		public abstract double getAggro(int identite);
 		public abstract double getIdentite();
 		
-		public double reactTo(Agent a) {
-			return getAggro((int) Math.floor(a.getIdentite())); 
+		public char reactTo(Agent a) {
+			char ret = 'i'; //ignore
+			double aggro = getAggro((int) Math.floor(a.getIdentite()));
+			double react = Math.random();
+			if(react < aggro) ret = 'a';
+			else if(react > (aggro + (1-aggro)/2)) ret = 'j';
+			return ret; 
 		}
+		
+		protected abstract void phaseReproduction();
+		protected abstract void phaseFin();
 		
 		protected void phaseRencontre() {
 			Bag b = modele.grille.getObjectsAtLocation(x, y);
@@ -120,11 +123,14 @@ public abstract class Agent implements Steppable{
 					if(o instanceof Agent) {
 						Agent a = (Agent) o;
 						if(a != this) {
-							double reaction = reactTo(a);
-							if(reaction > 0.7) {
-								attackAgent(a);
-							} else if(reaction < 0.3 && a.reactTo(this) < 0.3) {
-								join(a);
+							char reaction = reactTo(a);
+							switch(reaction) {
+								case 'a':
+									attackAgent(a);
+									break;
+								case 'j':
+									join(a);
+									break;
 							}
 							break;
 						}
@@ -171,18 +177,11 @@ public abstract class Agent implements Steppable{
 		
 		public abstract void endureAttack(Agent ag);
 		
-		public void attackAgent(Agent ag) {//对手的命值被自己的攻击力减去
+		public void attackAgent(Agent ag) {
 			ag.endureAttack(this);
 			if(!ag.isDead()) { 
-				ag.attackAgent(this);
-			}
-			
-//			if(this instanceof  InsecteCarn && ag instanceof Insecte) {
-//				InsecteCarn ic = (InsecteCarn)this;
-//				Insecte ins = (Insecte)ag;
-//				ic.mange(ins);
-//			}
-			
+				this.endureAttack(ag);
+			}			
 		}
 		
 		public boolean isDead() {

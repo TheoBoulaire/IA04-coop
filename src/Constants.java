@@ -2,18 +2,18 @@
 public class Constants {
 	public int grilleH;
 	public int grilleL;
-	public int nInsectes;
+	public int nInsectesHerb;
+	public int nInsectesCarn;
 	public int frameSize;
-	public int nNourriture;
-	public int foodEnergy;
+	public double foodEnergy;
 	public int maxFood;
 	public int maxEnergy;
-	public Constants(int h, int l, int ni, int fs, int nn, int fe, int mf, int me) {
+	public Constants(int h, int l, int nih, int nic, int fs, double fe, int mf, int me) {
 		grilleH = h;
 		grilleL = l;
-		nInsectes = ni;
+		nInsectesHerb = nih;
+		nInsectesCarn = nic;
 		frameSize = fs;
-		nNourriture = nn;
 		foodEnergy = fe;
 		maxFood = mf;
 		maxEnergy = me;
