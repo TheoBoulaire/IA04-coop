@@ -14,7 +14,7 @@ public class Modele extends SimState {
 	private IdentiteModele im = null;
 	public SparseGrid2D grille = new SparseGrid2D(c.grilleL, c.grilleH);
 	//public Stack<Double> aggroMorts = new Stack<Double>();
-	//public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
+	public ArrayList<Insecte> pileMorts = new ArrayList<Insecte>();
 	private ArrayList<Insecte> insectesVivants = new ArrayList<Insecte>();
 	//public Stack<Double> aggroNaissances = new Stack<Double>();
 

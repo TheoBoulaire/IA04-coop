@@ -99,6 +99,7 @@ public class Visualisation extends GUIState {
 			
 			case 2 : 
 				ShapePortrayal2D c = (new ShapePortrayal2D(ShapePortrayal2D.X_POINTS_HEXAGON, ShapePortrayal2D.Y_POINTS_HEXAGON) {
+					public void draw(Object object, Graphics2D graphics, DrawInfo2D info) {
 					if(i.isCarn) {
 						int R = (int) Math.abs(1-(i.getStrength() * 255/100));
 						paint = new Color(R, 0, 0);
@@ -109,6 +110,7 @@ public class Visualisation extends GUIState {
 							paint = new Color(0, 0, B);
 							super.draw(object, graphics, info);
 						}
+				}
 				});
 				p = c;
 				break;
