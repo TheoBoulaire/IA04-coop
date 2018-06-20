@@ -8,6 +8,7 @@ public class InsecteCarn extends Insecte{
 	public InsecteCarn(int x, int y, Modele m, int identite, ArrayList<Double> idAggros, double strength,
 			int energie, double vie) {
 		super(x, y, m, identite, idAggros, strength, energie, vie);
+		isCarn = true;
 	}
 
 	public void mange(Insecte ins) {

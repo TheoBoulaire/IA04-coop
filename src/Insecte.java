@@ -16,7 +16,8 @@ public abstract class Insecte extends Agent {
 	public double vie;
 	private static final long serialVersionUID = 31265800453373745L;
 	public Groupe myGroupe = null;
-	protected ArrayList<Double> idAggros;
+	public boolean isCarn = false;
+	private ArrayList<Double> idAggros;
 	
 	public double getAggroToOtherId() {
 		double ret = 0;
