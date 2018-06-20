@@ -21,7 +21,6 @@ public class Modele extends SimState {
 	private ArrayList<Double> aggroSelfList = new ArrayList<Double>();
 	private ArrayList<Double> aggroOtherList = new ArrayList<Double>();
 	
-	
 
 	public int nInsectesVivants = c.nInsectesHerb + c.nInsectesCarn;
 
@@ -46,6 +45,25 @@ public class Modele extends SimState {
 	public double aggroOthersLastNaissanceCarn;
 
 	private double aggroOthersLastNaissanceHerb;
+	
+	
+	public double getAggroSelfMoy() {
+		double aggroMoy = 0;
+		for(Double db : aggroSelfList) {
+			aggroMoy += db;
+		}
+		aggroMoy = aggroMoy / aggroSelfList.size();
+		return aggroMoy;
+	}
+	
+	public double getAggroOthersMoy() {
+		double aggroMoy = 0;
+		for(Double db : aggroOtherList) {
+			aggroMoy += db;
+		}
+		aggroMoy = aggroMoy / aggroSelfList.size();
+		return aggroMoy;
+	}
 	
 	public double getDiffAggroSelfLastNaissance() {
 		return aggroSelfLastNaissance - aggroLastNaissance;
@@ -403,11 +421,23 @@ public class Modele extends SimState {
 		else
 			aggroLastNaissanceHerb = ins.getAggro();
 		aggroSelfLastNaissance = ins.getAggroToSelf();
+		if(aggroSelfList.size() < 10)
+			aggroSelfList.add(ins.getAggroToSelf());
+		else {
+			aggroSelfList.remove(0);
+			aggroSelfList.add(ins.getAggroToSelf());
+		}
 		if(ins instanceof InsecteCarn)
 			aggroSelfLastNaissanceCarn = ins.getAggroToSelf();
 		else
 			aggroSelfLastNaissanceHerb = ins.getAggroToSelf();
 		aggroOthersLastNaissance = ins.getAggroToOtherId();
+		if(aggroOtherList.size() < 10)
+			aggroOtherList.add(ins.getAggroToOtherId());
+		else {
+			aggroOtherList.remove(0);
+			aggroOtherList.add(ins.getAggroToOtherId());
+		}
 		if(ins instanceof InsecteCarn)
 			aggroOthersLastNaissanceCarn = ins.getAggroToOtherId();
 		else
